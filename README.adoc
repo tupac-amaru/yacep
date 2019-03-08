@@ -1,0 +1,76 @@
+# *YACEP* : yet another csharp expression parser
+
+*YACEP* is a small and tiny csharp expression parser , can parse a valid single-line string to an abstract syntax tree. It also provides a simple compiler that can compile an abstract syntax tree to an `IEvaluator` instance, 
+`IEvaluator` instance can be executed as C# delegate.
+
+[source,csharp]
+----
+var state = new
+{
+    x = 7,
+    y = 43.0f,
+    z = new Dictionary<string, string>
+    {
+        ["yacep"] = "yet another csharp expression parser",
+        ["tupac-amaru"] = "was the last indigenous monarch (Sapa Inca) of the Neo-Inca State"
+    },
+    rand = new Func<object>(() => new Random().Next(1, 3)),
+    array = Enumerable.Range(1971, 1996 - 1971)
+};
+var expr = "x + y - z['yacep'].Length + max([1, 2, 3]) + (this.rand() > 2 ? 1971 : 1996) - len(array)";
+var evaluator = expr.Compile();
+var value = evaluator.EvaluateAs<decimal>(state); //1988
+----
+
+## Features
+- **Out of the box** - Zero-Configuration 
+- **Cross platform** - build with https://github.com/dotnet/standard/blob/master/docs/versions/netstandard2.0.md[netstandard2.0]
+- **Small and tiny** - the core parser code is only 500+ lines 
+- **Low consumption** - use https://docs.microsoft.com/en-za/dotnet/api/system.readonlyspan-1?view=netcore-2.2[ReadOnlySpan<T> Struct] to read string
+- **Fast** - good performance to access object's public method, field, property value instance over using C# reflection
+- **Custom unary operator** - support custom a string as an unary operator
+- **Custom binary operator** - support custom a string as a binary operator and set an https://en.wikipedia.org/wiki/Order_of_operations#Programming_language[order] for it
+- **Custom literal** - support custom a literal as a value
+- **Custom function** - support custom function
+- **Conditional expression** - like https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/conditional-operator[?:] operator in C#
+- **In expression** - evaluates to true if it finds a variable in an array and false otherwise
+
+ 
+
+## Expression value type - the value directly read from the string expression
+
+**Importants!!!** In fact, there is no signed number types in *YACEP* , because symbol `-` can be redefine as others meaning. But for convenience, when read an unsigned integer from expression, if value is less than 2147483648(https://docs.microsoft.com/en-us/dotnet/api/system.int32.maxvalue?view=netstandard-2.0[int.MaxValue]) ,it will be convert to `int` type  
+
+.Data Types
+[options="unbreakable"]
+|=======
+|Data Type|C# Data Type | Description  
+
+|ulong 
+|https://docs.microsoft.com/en-us/dotnet/api/system.uint64?view=netstandard-2.0[UInt64]
+|value type is `integer` when value is less than 4294967295(https://docs.microsoft.com/en-us/dotnet/api/system.uint32.maxvalue?view=netstandard-2.0[uint.MaxValue]) else `ulong`. :point_down:
+|integer 
+|https://docs.microsoft.com/en-us/dotnet/api/system.uint32?view=netstandard-2.0[UInt32]
+|value type is `int` when value is less than 2147483648(https://docs.microsoft.com/en-us/dotnet/api/system.int32.maxvalue?view=netstandard-2.0[int.MaxValue] else `integer`. :point_down:
+|int 
+|https://docs.microsoft.com/en-us/dotnet/api/system.int32?view=netstandard-2.0[Int32]
+|value less than 2147483648 when readed from expression 
+|decimal 
+|https://docs.microsoft.com/en-us/dotnet/api/system.decimal?view=netstandard-2.0[Decimal]
+| a decimal floating-point number
+|string 
+|https://docs.microsoft.com/en-us/dotnet/api/system.string?view=netstandard-2.0[String]
+|UTF-16 string. support single quote and double quote  
+|array
+|https://docs.microsoft.com/en-us/dotnet/api/system.array?view=netstandard-2.0[Object Array]
+|an object array
+|literal
+|https://docs.microsoft.com/en-us/dotnet/api/system.object?view=netstandard-2.0[Object]
+|mapping a literal to a value. 
+|=======
+
+
+
+## License
+MIT license
+
