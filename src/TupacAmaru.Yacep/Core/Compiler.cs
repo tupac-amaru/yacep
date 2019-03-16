@@ -217,14 +217,14 @@ namespace TupacAmaru.Yacep.Core
                 ctorIl.Emit(OpCodes.Ldarg_0);
                 postion(ctorIl);
                 ctorIl.Emit(OpCodes.Ldstr, item.Key);
-                ctorIl.Emit(OpCodes.Callvirt, getItem);
+                ctorIl.Emit(OpCodes.Call, getItem);
                 ctorIl.Emit(OpCodes.Stfld, item.Value);
             }
         }
         private static FieldBuilder GetOrAddValue<V>(TypeBuilder typeBuilder, Conjunction<V> conjunction, string symbol, Type fieldType, V value)
         {
             if (conjunction.TryGetValue(symbol, out var definedValue)) return definedValue;
-            var field = typeBuilder.DefineField($"_p{NameCounter.GetCurrentCount()}", fieldType, FieldAttributes.Private | FieldAttributes.InitOnly);
+            var field = typeBuilder.DefineField($"_f{NameCounter.GetCurrentCount()}", fieldType, FieldAttributes.Private | FieldAttributes.InitOnly);
             conjunction.Add(symbol, field, value);
             return field;
         }
@@ -328,7 +328,7 @@ namespace TupacAmaru.Yacep.Core
         }
         private static void GenerateConstructor(CompileContext compileContext)
         {
-            var ctor = compileContext.TypeBuilder.DefineConstructor(MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, CallingConventions.Standard, new[]
+            var ctor = compileContext.TypeBuilder.DefineConstructor(MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, CallingConventions.HasThis, new[]
             {
                 typeof(Dictionary<string, object>),
                 typeof(Dictionary<string, UnaryOperatorHandler>),
@@ -341,6 +341,8 @@ namespace TupacAmaru.Yacep.Core
                 typeof(FunctionEvaluator)
             });
             var ctorIl = ctor.GetILGenerator();
+            ctorIl.Emit(OpCodes.Ldarg_0);
+            ctorIl.Emit(OpCodes.Call, typeof(object).GetConstructor(Type.EmptyTypes));
             SetFields(ctorIl, il => il.Emit(OpCodes.Ldarg_1), compileContext.Literals);
             SetFields(ctorIl, il => il.Emit(OpCodes.Ldarg_2), compileContext.Unarys);
             SetFields(ctorIl, il => il.Emit(OpCodes.Ldarg_3), compileContext.Binarys);
@@ -508,7 +510,7 @@ namespace TupacAmaru.Yacep.Core
             GenerateExecuteMethod(expression, typeBuilder, methodName, compileContext);
             GenerateConstructor(compileContext);
 
-            var workerType = typeBuilder.CreateTypeInfo().AsType();
+            var workerType = typeBuilder.CreateTypeInfo().AsType(); 
             return CreateEvaluator(workerType, workerType.GetMethod(methodName), compileContext);
         }
     }

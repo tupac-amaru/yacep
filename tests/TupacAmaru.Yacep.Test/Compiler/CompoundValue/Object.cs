@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using TupacAmaru.Yacep.Exceptions;
-using TupacAmaru.Yacep.Expressions;
 using TupacAmaru.Yacep.Extensions;
 using Xunit;
 
@@ -73,6 +73,23 @@ namespace TupacAmaru.Yacep.Test.Compiler.CompoundValue
                 }));
         }
 
+        [Fact(DisplayName = "compile dynamic object")]
+        public void CompileExpandoObject()
+        {
+            var compiler = Core.Compiler.Default;
+            dynamic expandoObject = new ExpandoObject();
+            expandoObject.a = compiler;
+            expandoObject.b = "b";
+            Assert.Equal(compiler, "this['a']".Compile().Evaluate(expandoObject));
+            Assert.Equal(compiler, "a".Compile().Evaluate(expandoObject));
+            expandoObject.a = new Func<object>(() => "aaa");
+            expandoObject.b = "b";
+            Assert.Equal("aaa", "this.a()".Compile().Evaluate(expandoObject));
+            expandoObject.a = new Func<object, object>(s => s == null);
+            expandoObject.b = "b";
+            Assert.True("this.a(null)".Compile().Evaluate(expandoObject));
+        }
+
         [Fact(DisplayName = "compile object member")]
         public void CompileObjectMemberExpression()
         {
@@ -83,7 +100,7 @@ namespace TupacAmaru.Yacep.Test.Compiler.CompoundValue
                 a = "x",
                 c = () => "string"
             };
-            Assert.Equal(fixture.a, "this.a".Compile().EvaluateAs<string>(fixture)); 
+            Assert.Equal(fixture.a, "this.a".Compile().EvaluateAs<string>(fixture));
             Assert.Equal("aa", "this.a()".Compile().EvaluateAs<string>(new Fixture { a = new Func<string>(() => "aa") }));
             Assert.Equal("aa", "this.D()".Compile().EvaluateAs<string>(new Fixture { D = new Func<string>(() => "aa") }));
             Assert.Equal(fixture.ToString(), "this.ToString()".Compile().EvaluateAs<string>(fixture));
