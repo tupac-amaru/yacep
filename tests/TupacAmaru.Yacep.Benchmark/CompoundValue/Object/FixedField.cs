@@ -16,15 +16,19 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue.Object
                 .Select(c => (char)c).ToArray();
         private static readonly FixtureForField fixture = new FixtureForField();
         private static readonly Random random = new Random();
-        private static readonly string fieldName = "xchjjtool";
-        private static readonly FieldInfo fieldInfo = typeof(FixtureForField).GetField(fieldName);
-        private static readonly IEvaluator evaluator = $"{fieldName}".Compile();
+        private static readonly FieldInfo fieldInfo;
+        private static readonly IEvaluator evaluator;
         private static readonly Func<FixtureForField, string> reader;
         private static readonly string value;
         static FixedFieldBenchmark()
         {
             var obj = Expression.Parameter(typeof(FixtureForField), "fixture");
+            var fieldName = "xchjjtool";
+            fieldInfo = typeof(FixtureForField).GetField(fieldName);
             reader = Expression.Lambda<Func<FixtureForField, string>>(Expression.Field(obj, fieldInfo), "ReadObjectFieldUseDelegate", new[] { obj }).Compile();
+            evaluator = $"this.{fieldName}".Compile();
+            evaluator.Evaluate(fixture);
+
             value = new string(Enumerable.Range(0, 100).Select(x => chars[random.Next(0, chars.Length)]).ToArray());
             fieldInfo.SetValue(fixture, value);
         }
@@ -61,7 +65,6 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue.Object
             if (!string.Equals(value, result, StringComparison.Ordinal))
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
         }
-
         [Benchmark]
         public void UseYacep()
         {
