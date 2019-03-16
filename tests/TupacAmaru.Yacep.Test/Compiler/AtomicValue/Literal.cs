@@ -21,6 +21,7 @@ namespace TupacAmaru.Yacep.Test.Compiler.AtomicValue
             Assert.Equal(119.7454718m, "sum(array)".Compile(option).Evaluate(null));
             Assert.Equal(-90.44m, "abc".Compile(option).Evaluate(null));
             Assert.Null("null".Compile().Evaluate(null));
+            Assert.Null("null".Compile().Evaluate(12));
             Assert.Null("null".Compile().EvaluateAs<object>());
             Assert.Null("null".Compile().EvaluateAsType(typeof(object)));
             Assert.True("true".Compile().EvaluateAs<bool>());
