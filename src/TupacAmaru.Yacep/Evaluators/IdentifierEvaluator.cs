@@ -12,10 +12,26 @@ namespace TupacAmaru.Yacep.Evaluators
     public delegate object IdentifierExpressionEvaluator(object state, Type stateType, string identifier);
     public static class IdentifierEvaluator
     {
+        private sealed class TypeEqualityComparer : IEqualityComparer<Type>
+        {
+            public static readonly TypeEqualityComparer Instance = new TypeEqualityComparer();
+
+            public bool Equals(Type x, Type y) => x.Equals(y);
+
+            public int GetHashCode(Type obj) => obj.GetHashCode();
+        }
+        private sealed class StringEqualityComparer : IEqualityComparer<string>
+        {
+            public static readonly StringEqualityComparer Instance = new StringEqualityComparer();
+
+            public bool Equals(string x, string y) => x.Equals(y);
+
+            public int GetHashCode(string obj) => obj.GetHashCode();
+        }
         private static readonly ConcurrentDictionary<Type, ConcurrentDictionary<string, Func<object, object>>> cache
-            = new ConcurrentDictionary<Type, ConcurrentDictionary<string, Func<object, object>>>();
+            = new ConcurrentDictionary<Type, ConcurrentDictionary<string, Func<object, object>>>(TypeEqualityComparer.Instance);
         private static readonly ConcurrentDictionary<Type, Func<object, string, object>> dictionaryGetters
-            = new ConcurrentDictionary<Type, Func<object, string, object>>();
+            = new ConcurrentDictionary<Type, Func<object, string, object>>(TypeEqualityComparer.Instance);
         private static Func<object, object> CreateGetterFromField(Type type, FieldInfo field)
         {
             var obj = Expression.Parameter(typeof(object), "obj");
@@ -136,7 +152,7 @@ namespace TupacAmaru.Yacep.Evaluators
                 return dictionaryReader(state, identifier);
             }
             if (cache.TryGetValue(stateType, out var members) && members.TryGetValue(identifier, out var func))
-            { 
+            {
                 return func(state);
             }
             var dictionaryType = stateType.GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IDictionary<,>));
@@ -155,7 +171,7 @@ namespace TupacAmaru.Yacep.Evaluators
                 }
             }
             return cache
-                .GetOrAdd(stateType, t => new ConcurrentDictionary<string, Func<object, object>>())
+                .GetOrAdd(stateType, t => new ConcurrentDictionary<string, Func<object, object>>(StringEqualityComparer.Instance))
                 .GetOrAdd(identifier, id => CreateGetter(stateType, id))(state);
         }
     }
