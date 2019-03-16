@@ -1,6 +1,5 @@
 ﻿using TupacAmaru.Yacep.Core;
 using TupacAmaru.Yacep.Expressions;
-using System.Linq;
 
 namespace TupacAmaru.Yacep.Extensions
 {
@@ -23,7 +22,5 @@ namespace TupacAmaru.Yacep.Extensions
             => expr.ToEvaluableExpression(parser).Compile(compiler);
         public static IEvaluator Compile(this string expr, IParser parser, ReadOnlyParseOption option, ICompiler compiler = null)
             => expr.ToEvaluableExpression(parser, option).Compile(compiler);
-
-        internal static bool ContainsSpace(this string str) => str.Any(CharExtension.IsSpace);
     }
 }

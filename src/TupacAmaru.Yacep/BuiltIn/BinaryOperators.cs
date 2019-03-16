@@ -5,24 +5,24 @@ using System.Linq.Expressions;
 using System.Reflection;
 using TupacAmaru.Yacep.Exceptions;
 using TupacAmaru.Yacep.Symbols;
+using TupacAmaru.Yacep.Utils;
 
 namespace TupacAmaru.Yacep.BuiltIn
 {
     public static class BinaryOperators
     {
         private static readonly ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>> addFunctions
-            = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>>();
+            = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>>(TypeEqualityComparer.Instance);
         private static readonly ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>> minusFunctions
-            = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>>();
+            = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>>(TypeEqualityComparer.Instance);
         private static readonly ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>> multiplyFunctions
-            = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>>();
+            = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>>(TypeEqualityComparer.Instance);
         private static readonly ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>> divideFunctions
-            = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>>();
+            = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>>(TypeEqualityComparer.Instance);
         private static readonly ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>> moduloFunctions
-            = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>>();
+            = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>>(TypeEqualityComparer.Instance);
         private static readonly ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, int>>> compareFunctions
-            = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, int>>>();
-
+            = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, int>>>(TypeEqualityComparer.Instance);
 
         private static MethodInfo GetCompareTo(Type type) => type.GetMethod("CompareTo", new[] { type });
         private static MethodInfo GetConvertTo(Type fromType, Type toType) => typeof(Convert)

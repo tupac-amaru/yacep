@@ -1,4 +1,5 @@
 ﻿using TupacAmaru.Yacep.BuiltIn;
+using TupacAmaru.Yacep.Utils;
 
 namespace TupacAmaru.Yacep.Evaluators
 {

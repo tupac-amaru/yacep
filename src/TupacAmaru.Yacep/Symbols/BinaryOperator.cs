@@ -1,13 +1,8 @@
 ﻿using TupacAmaru.Yacep.Exceptions;
-using TupacAmaru.Yacep.Extensions;
+using TupacAmaru.Yacep.Utils;
 
 namespace TupacAmaru.Yacep.Symbols
-{
-    internal interface IOperator
-    {
-        string Operator { get; }
-    }
-
+{ 
     public delegate object BinaryOperatorHandler(object leftValue, object rightValue);
 
     public sealed class BinaryOperator : IOperator

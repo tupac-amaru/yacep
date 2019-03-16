@@ -1,5 +1,6 @@
 ﻿using TupacAmaru.Yacep.Exceptions;
 using TupacAmaru.Yacep.Symbols;
+using TupacAmaru.Yacep.Utils;
 
 namespace TupacAmaru.Yacep.BuiltIn
 {
