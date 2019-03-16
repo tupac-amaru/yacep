@@ -26,7 +26,7 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue.Object
             var fieldName = "xchjjtool";
             fieldInfo = typeof(FixtureForField).GetField(fieldName);
             reader = Expression.Lambda<Func<FixtureForField, string>>(Expression.Field(obj, fieldInfo), "ReadObjectFieldUseDelegate", new[] { obj }).Compile();
-            evaluator = $"this.{fieldName}".Compile();
+            evaluator = $"{fieldName}".Compile();
             evaluator.Evaluate(fixture);
 
             value = new string(Enumerable.Range(0, 100).Select(x => chars[random.Next(0, chars.Length)]).ToArray());

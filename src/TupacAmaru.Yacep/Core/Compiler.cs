@@ -32,11 +32,11 @@ namespace TupacAmaru.Yacep.Core
         private sealed class CachableEvaluator : IEvaluator
         {
             private readonly object instance;
-            private readonly Func<object, object, Type, object> execute;
+            private readonly Func<object, object, object> execute;
             private object cachedValue;
             private bool executed;
 
-            public CachableEvaluator(object instance, Func<object, object, Type, object> execute)
+            public CachableEvaluator(object instance, Func<object, object, object> execute)
             {
                 this.instance = instance;
                 this.execute = execute;
@@ -45,22 +45,22 @@ namespace TupacAmaru.Yacep.Core
             {
                 if (executed) return cachedValue;
                 executed = true;
-                cachedValue = execute(instance, state, state?.GetType());
+                cachedValue = execute(instance, state);
                 return cachedValue;
             }
         }
         private sealed class Evaluator : IEvaluator
         {
             private readonly object instance;
-            private readonly Func<object, object, Type, object> execute;
+            private readonly Func<object, object, object> execute;
 
-            public Evaluator(object instance, Func<object, object, Type, object> execute)
+            public Evaluator(object instance, Func<object, object, object> execute)
             {
                 this.instance = instance;
                 this.execute = execute;
             }
 
-            public object Evaluate(object state) => execute(instance, state, state?.GetType());
+            public object Evaluate(object state) => execute(instance, state);
         }
 
         private delegate object ObjectCreator(
@@ -68,22 +68,19 @@ namespace TupacAmaru.Yacep.Core
             Dictionary<string, UnaryOperatorHandler> unary,
             Dictionary<string, BinaryOperatorHandler> binarys,
             Dictionary<string, NakedFunctionHandler> functions,
-            IdentifierExpressionEvaluator identifierEvaluator,
             ConditionExpressionEvaluator conditionEvaluator,
             InExpressionEvaluator inEvaluator,
             ObjectMemberExpressionEvaluator objectMemberEvaluator,
             FunctionEvaluator functionEvaluator);
 
-        private readonly IdentifierExpressionEvaluator identifierValueGetter;
         private readonly ConditionExpressionEvaluator conditionExpressionEvaluator;
         private readonly InExpressionEvaluator inExpressionEvaluator;
         private readonly ObjectMemberExpressionEvaluator objectMemberExpressionEvaluator;
         private readonly FunctionEvaluator functionEvaluator;
 
-        public Compiler() : this(null, null, null, null, null) { }
-        public Compiler(IdentifierExpressionEvaluator identifierValueGetter, ConditionExpressionEvaluator conditionExpressionEvaluator, InExpressionEvaluator inExpressionEvaluator, ObjectMemberExpressionEvaluator objectMemberExpressionEvaluator, FunctionEvaluator functionEvaluator)
+        public Compiler() : this(null, null, null, null) { }
+        public Compiler(ConditionExpressionEvaluator conditionExpressionEvaluator, InExpressionEvaluator inExpressionEvaluator, ObjectMemberExpressionEvaluator objectMemberExpressionEvaluator, FunctionEvaluator functionEvaluator)
         {
-            this.identifierValueGetter = identifierValueGetter;
             this.conditionExpressionEvaluator = conditionExpressionEvaluator;
             this.inExpressionEvaluator = inExpressionEvaluator;
             this.objectMemberExpressionEvaluator = objectMemberExpressionEvaluator;
@@ -107,7 +104,6 @@ namespace TupacAmaru.Yacep.Core
         private class CompileContext
         {
             private FieldInfo conditionEvaluator;
-            private FieldInfo identifierEvaluator;
             private FieldInfo inEvaluator;
             private FieldInfo objectMemberEvaluator;
             private FieldInfo functionCaller;
@@ -126,18 +122,6 @@ namespace TupacAmaru.Yacep.Core
                 }
             }
             public bool HaveConditionEvaluator => conditionEvaluator != null;
-            public FieldInfo IdentifierEvaluator
-            {
-                get
-                {
-                    if (identifierEvaluator == null)
-                    {
-                        identifierEvaluator = TypeBuilder.DefineField("_identifierEvaluator", typeof(IdentifierExpressionEvaluator), FieldAttributes.Private | FieldAttributes.InitOnly);
-                    }
-                    return identifierEvaluator;
-                }
-            }
-            public bool HaveIdentifierEvaluator => identifierEvaluator != null;
             public FieldInfo InEvaluator
             {
                 get
@@ -192,7 +176,6 @@ namespace TupacAmaru.Yacep.Core
             public static readonly MethodInfo HandleUnaryOperator = typeof(UnaryOperatorHandler).GetMethod("Invoke");
             public static readonly MethodInfo HandleNakedFunction = typeof(NakedFunctionHandler).GetMethod("Invoke");
             public static readonly MethodInfo EvaluateConditionExpression = typeof(ConditionExpressionEvaluator).GetMethod("Invoke");
-            public static readonly MethodInfo EvaluateIdentifierExpression = typeof(IdentifierExpressionEvaluator).GetMethod("Invoke");
             public static readonly MethodInfo EvaluateInExpression = typeof(InExpressionEvaluator).GetMethod("Invoke");
             public static readonly MethodInfo EvaluateObjectMemberExpression = typeof(ObjectMemberExpressionEvaluator).GetMethod("Invoke");
             public static readonly MethodInfo CallFunction = typeof(FunctionEvaluator).GetMethod("Invoke");
@@ -334,7 +317,6 @@ namespace TupacAmaru.Yacep.Core
                 typeof(Dictionary<string, UnaryOperatorHandler>),
                 typeof(Dictionary<string, BinaryOperatorHandler>),
                 typeof(Dictionary<string, NakedFunctionHandler>),
-                typeof(IdentifierExpressionEvaluator),
                 typeof(ConditionExpressionEvaluator),
                 typeof(InExpressionEvaluator),
                 typeof(ObjectMemberExpressionEvaluator),
@@ -347,26 +329,21 @@ namespace TupacAmaru.Yacep.Core
             SetFields(ctorIl, il => il.Emit(OpCodes.Ldarg_2), compileContext.Unarys);
             SetFields(ctorIl, il => il.Emit(OpCodes.Ldarg_3), compileContext.Binarys);
             SetFields(ctorIl, il => il.Emit(OpCodes.Ldarg_S, 4), compileContext.Functions);
-            if (compileContext.HaveIdentifierEvaluator)
-                SetField(ctorIl, il => il.Emit(OpCodes.Ldarg_S, 5), compileContext.IdentifierEvaluator);
             if (compileContext.HaveConditionEvaluator)
-                SetField(ctorIl, il => il.Emit(OpCodes.Ldarg_S, 6), compileContext.ConditionEvaluator);
+                SetField(ctorIl, il => il.Emit(OpCodes.Ldarg_S, 5), compileContext.ConditionEvaluator);
             if (compileContext.HaveInEvaluator)
-                SetField(ctorIl, il => il.Emit(OpCodes.Ldarg_S, 7), compileContext.InEvaluator);
+                SetField(ctorIl, il => il.Emit(OpCodes.Ldarg_S, 6), compileContext.InEvaluator);
             if (compileContext.HaveObjectMemberEvaluator)
-                SetField(ctorIl, il => il.Emit(OpCodes.Ldarg_S, 8), compileContext.ObjectMemberEvaluator);
+                SetField(ctorIl, il => il.Emit(OpCodes.Ldarg_S, 7), compileContext.ObjectMemberEvaluator);
             if (compileContext.HaveFunctionCaller)
-                SetField(ctorIl, il => il.Emit(OpCodes.Ldarg_S, 9), compileContext.FunctionCaller);
+                SetField(ctorIl, il => il.Emit(OpCodes.Ldarg_S, 8), compileContext.FunctionCaller);
             ctorIl.Emit(OpCodes.Ret);
         }
         private static void GenerateExecuteMethod(EvaluableExpression expression, TypeBuilder typeBuilder, string methodName, CompileContext compileContext)
         {
             var execute = typeBuilder.DefineMethod(methodName, MethodAttributes.Public | MethodAttributes.HideBySig, CallingConventions.Standard,
-                typeof(object), new[] { typeof(object), typeof(Type) });
+                typeof(object), new[] { typeof(object) });
             var executeIl = execute.GetILGenerator();
-            executeIl.DeclareLocal(typeof(Type));
-            executeIl.Emit(OpCodes.Ldarg_2);
-            executeIl.Emit(OpCodes.Stloc_0);
             GenerateInstruction(executeIl, expression, compileContext);
             executeIl.Emit(OpCodes.Ret);
         }
@@ -398,22 +375,6 @@ namespace TupacAmaru.Yacep.Core
                     GenerateInstruction(il, conditionalExpression.ValueIfFalse, compileContext);
                     il.Emit(OpCodes.Call, Delegates.EvaluateConditionExpression);
                     break;
-                case IdentifierExpression identifierExpression:
-                    compileContext.Cachable = false;
-                    if (string.Equals("this", identifierExpression.Name, StringComparison.Ordinal))
-                    {
-                        il.Emit(OpCodes.Ldarg_1);
-                    }
-                    else
-                    {
-                        il.Emit(OpCodes.Ldarg_0);
-                        il.Emit(OpCodes.Ldfld, compileContext.IdentifierEvaluator);
-                        il.Emit(OpCodes.Ldarg_1);
-                        il.Emit(OpCodes.Ldloc_0);
-                        il.Emit(OpCodes.Ldstr, identifierExpression.Name);
-                        il.Emit(OpCodes.Call, Delegates.EvaluateIdentifierExpression);
-                    }
-                    break;
                 case InExpression inExpression:
                     il.Emit(OpCodes.Ldarg_0);
                     il.Emit(OpCodes.Ldfld, compileContext.InEvaluator);
@@ -426,6 +387,14 @@ namespace TupacAmaru.Yacep.Core
                     var literalValueName = $"_l{literalValue.Literal.GetHashCode()}";
                     GenerateValue(il, literalValue.Value, compileContext, literalValueName);
                     break;
+                case Expressions.UnaryExpression unaryExpression:
+                    il.Emit(OpCodes.Ldarg_0);
+                    var unaryOperator = unaryExpression.UnaryOperator;
+                    var unaryOperatorField = GetOrAddValue(compileContext.TypeBuilder, compileContext.Unarys, unaryOperator.Operator, typeof(UnaryOperatorHandler), unaryOperator.Handler);
+                    il.Emit(OpCodes.Ldfld, unaryOperatorField);
+                    GenerateInstruction(il, unaryExpression.Argument, compileContext);
+                    il.Emit(OpCodes.Call, Delegates.HandleUnaryOperator);
+                    break;
                 case NakedFunctionCallExpression nakedFunctionCallExpression:
                     if (!nakedFunctionCallExpression.NakedFunction.Cachable)
                         compileContext.Cachable = false;
@@ -436,6 +405,22 @@ namespace TupacAmaru.Yacep.Core
                     GenerateArray(il, nakedFunctionCallExpression.Arguments, compileContext);
                     il.Emit(OpCodes.Call, Delegates.HandleNakedFunction);
                     break;
+                case IdentifierExpression identifierExpression:
+                    compileContext.Cachable = false;
+                    if (string.Equals("this", identifierExpression.Name, StringComparison.Ordinal))
+                    {
+                        il.Emit(OpCodes.Ldarg_1);
+                    }
+                    else
+                    {
+                        il.Emit(OpCodes.Ldarg_0);
+                        il.Emit(OpCodes.Ldfld, compileContext.ObjectMemberEvaluator);
+                        il.Emit(OpCodes.Ldarg_1);
+                        il.Emit(OpCodes.Ldstr, identifierExpression.Name);
+                        il.Emit(OpCodes.Ldc_I4_0);
+                        il.Emit(OpCodes.Call, Delegates.EvaluateObjectMemberExpression);
+                    }
+                    break;
                 case ObjectMemberExpression objectMemberExpression:
                     if (!objectMemberExpression.IsIndexer
                         && objectMemberExpression.Object is IdentifierExpression obj
@@ -444,11 +429,11 @@ namespace TupacAmaru.Yacep.Core
                     {
                         compileContext.Cachable = false;
                         il.Emit(OpCodes.Ldarg_0);
-                        il.Emit(OpCodes.Ldfld, compileContext.IdentifierEvaluator);
+                        il.Emit(OpCodes.Ldfld, compileContext.ObjectMemberEvaluator);
                         il.Emit(OpCodes.Ldarg_1);
-                        il.Emit(OpCodes.Ldloc_0);
                         il.Emit(OpCodes.Ldstr, member.Name);
-                        il.Emit(OpCodes.Call, Delegates.EvaluateIdentifierExpression);
+                        il.Emit(OpCodes.Ldc_I4_0);
+                        il.Emit(OpCodes.Call, Delegates.EvaluateObjectMemberExpression);
                     }
                     else
                     {
@@ -470,14 +455,6 @@ namespace TupacAmaru.Yacep.Core
                     GenerateArray(il, objectsFunctionCallExpression.Arguments, compileContext);
                     il.Emit(OpCodes.Call, Delegates.CallFunction);
                     break;
-                case Expressions.UnaryExpression unaryExpression:
-                    il.Emit(OpCodes.Ldarg_0);
-                    var unaryOperator = unaryExpression.UnaryOperator;
-                    var unaryOperatorField = GetOrAddValue(compileContext.TypeBuilder, compileContext.Unarys, unaryOperator.Operator, typeof(UnaryOperatorHandler), unaryOperator.Handler);
-                    il.Emit(OpCodes.Ldfld, unaryOperatorField);
-                    GenerateInstruction(il, unaryExpression.Argument, compileContext);
-                    il.Emit(OpCodes.Call, Delegates.HandleUnaryOperator);
-                    break;
             }
         }
 
@@ -489,7 +466,6 @@ namespace TupacAmaru.Yacep.Core
                 Expression.Parameter(typeof(Dictionary<string, UnaryOperatorHandler>),"unarys"),
                 Expression.Parameter(typeof(Dictionary<string, BinaryOperatorHandler>),"binarys"),
                 Expression.Parameter(typeof(Dictionary<string, NakedFunctionHandler>),"functions"),
-                Expression.Parameter(typeof(IdentifierExpressionEvaluator),"identifierExpressionEvaluator"),
                 Expression.Parameter(typeof(ConditionExpressionEvaluator),"conditionExpressionEvaluator"),
                 Expression.Parameter(typeof(InExpressionEvaluator),"inExpressionEvaluator"),
                 Expression.Parameter(typeof(ObjectMemberExpressionEvaluator),"objectMemberExpressionEvaluator"),
@@ -498,7 +474,6 @@ namespace TupacAmaru.Yacep.Core
             var creater = Expression.Lambda<ObjectCreator>(Expression.New(type.GetConstructors().First(),
                 arguments.Select(x => x as Expression)), "CreateInstance", arguments).Compile();
             return creater(compileContext.Literals.Mappings, compileContext.Unarys.Mappings, compileContext.Binarys.Mappings, compileContext.Functions.Mappings,
-                identifierValueGetter ?? IdentifierEvaluator.Evaluate,
                 conditionExpressionEvaluator ?? ConditionEvaluator.Evaluate,
                 inExpressionEvaluator ?? InEvaluator.Evaluate,
                 objectMemberExpressionEvaluator ?? ObjectMemberEvaluator.Evaluate,
@@ -509,9 +484,8 @@ namespace TupacAmaru.Yacep.Core
             var instance = CreateInstance(type, compileContext);
             var ins = Expression.Parameter(typeof(object), "proxy");
             var state = Expression.Parameter(typeof(object), "state");
-            var stateType = Expression.Parameter(typeof(Type), "stateType");
-            var callExecute = Expression.Call(Expression.Convert(ins, type), execute, state, stateType);
-            var func = Expression.Lambda<Func<object, object, Type, object>>(callExecute, "Evaluate", new[] { ins, state, stateType }).Compile();
+            var callExecute = Expression.Call(Expression.Convert(ins, type), execute, state);
+            var func = Expression.Lambda<Func<object, object, object>>(callExecute, "Evaluate", new[] { ins, state }).Compile();
             return compileContext.Cachable ? (IEvaluator)new CachableEvaluator(instance, func) : new Evaluator(instance, func);
         }
 
@@ -529,5 +503,7 @@ namespace TupacAmaru.Yacep.Core
             var workerType = typeBuilder.CreateTypeInfo().AsType();
             return CreateEvaluator(workerType, workerType.GetMethod(methodName), compileContext);
         }
+
+
     }
 }
