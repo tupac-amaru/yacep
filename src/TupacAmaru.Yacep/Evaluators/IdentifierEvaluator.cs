@@ -6,28 +6,13 @@ using System.Linq.Expressions;
 using System.Reflection;
 using TupacAmaru.Yacep.Exceptions;
 using TupacAmaru.Yacep.Extensions;
+using TupacAmaru.Yacep.Utils;
 
 namespace TupacAmaru.Yacep.Evaluators
 {
     public delegate object IdentifierExpressionEvaluator(object state, Type stateType, string identifier);
     public static class IdentifierEvaluator
     {
-        private sealed class TypeEqualityComparer : IEqualityComparer<Type>
-        {
-            public static readonly TypeEqualityComparer Instance = new TypeEqualityComparer();
-
-            public bool Equals(Type x, Type y) => x.Equals(y);
-
-            public int GetHashCode(Type obj) => obj.GetHashCode();
-        }
-        private sealed class StringEqualityComparer : IEqualityComparer<string>
-        {
-            public static readonly StringEqualityComparer Instance = new StringEqualityComparer();
-
-            public bool Equals(string x, string y) => x.Equals(y);
-
-            public int GetHashCode(string obj) => obj.GetHashCode();
-        }
         private static readonly ConcurrentDictionary<Type, ConcurrentDictionary<string, Func<object, object>>> cache
             = new ConcurrentDictionary<Type, ConcurrentDictionary<string, Func<object, object>>>(TypeEqualityComparer.Instance);
         private static readonly ConcurrentDictionary<Type, Func<object, string, object>> dictionaryGetters

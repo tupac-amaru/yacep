@@ -4,12 +4,13 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace TupacAmaru.Yacep.Extensions
+namespace TupacAmaru.Yacep.Utils
 {
-    internal static class MethodInfoExtension
+    internal static class MethodInfoHelper
     {
         private static readonly ConcurrentDictionary<MethodInfo, Func<object, object[], object>> cache
-            = new ConcurrentDictionary<MethodInfo, Func<object, object[], object>>();
+            = new ConcurrentDictionary<MethodInfo, Func<object, object[], object>>(MethodInfoEqualityComparer.Instance);
+
         private static Func<object, object[], object> BuildCaller(MethodInfo methodInfo)
         {
             Func<object, object[], object> callable;

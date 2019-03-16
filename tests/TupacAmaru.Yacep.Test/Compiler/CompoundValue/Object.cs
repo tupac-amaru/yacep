@@ -64,6 +64,7 @@ namespace TupacAmaru.Yacep.Test.Compiler.CompoundValue
                 ["b"] = "b"
             }));
             Assert.Null("this.a(null)".Compile().EvaluateAs<object>(new Dictionary<string, Func<object, object>> { ["a"] = Fixture.ReturnMe }));
+            Assert.Null("this.b(null)".Compile().EvaluateAs<object>(new Dictionary<string, Func<object, object>> { ["b"] = Fixture.ReturnMe }));
             Assert.Null("this.a(null)".Compile().EvaluateAs<object>(new Dictionary<string, Action> { ["a"] = Fixture.DoEmpty }));
 
             Assert.Throws<UnsupportedFunctionException>(() => compiler.Compile("this.a('111')".ToEvaluableExpression())

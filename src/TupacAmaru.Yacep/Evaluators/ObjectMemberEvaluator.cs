@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Linq.Expressions;
 using TupacAmaru.Yacep.Exceptions;
 using TupacAmaru.Yacep.Extensions;
+using TupacAmaru.Yacep.Utils;
 
 namespace TupacAmaru.Yacep.Evaluators
 {
@@ -10,7 +11,7 @@ namespace TupacAmaru.Yacep.Evaluators
     public static class ObjectMemberEvaluator
     {
         private static readonly ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>> cache
-            = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>>();
+            = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>>(TypeEqualityComparer.Instance);
 
         private static Func<object, object, object> CreateGetter(Type type, Type indexerType)
         {
