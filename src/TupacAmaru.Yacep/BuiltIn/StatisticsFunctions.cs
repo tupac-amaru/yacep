@@ -30,8 +30,6 @@ namespace TupacAmaru.Yacep.BuiltIn
             if (type == typeof(decimal)) return (x, y) => x + (decimal)y;
 
             var @implicit = GetDecimalImplicit(type);
-            if (@implicit == null) return (x, y) => throw new UnsupportedOperationException("+", x, y);
-
             var a = Expression.Parameter(typeof(decimal), "x");
             var b = Expression.Parameter(typeof(object), "y");
             var addAssign = Expression.Add(a, type == typeof(decimal) ? (Expression)Expression.Unbox(b, type) :

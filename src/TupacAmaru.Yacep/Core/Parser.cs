@@ -412,7 +412,6 @@ namespace TupacAmaru.Yacep.Core
                 while (TryFindBinaryOperator(out binaryOperator, out var start))
                 {
                     var precedence = binaryOperator.Precedence;
-                    if (precedence == 0) break;
                     var currentBinaryOperator = binaryOperator;
                     while ((list.Count > 2) && (precedence <= ((BinaryOperator)list[list.Count - 2]).Precedence))
                     {

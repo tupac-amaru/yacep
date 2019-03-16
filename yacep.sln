@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TupacAmaru.Yacep", "src\Tup
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TupacAmaru.Yacep.Test", "tests\TupacAmaru.Yacep.Test\TupacAmaru.Yacep.Test.csproj", "{BC23D4DB-9C0C-4088-AAFD-C62BAD9A6A44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TupacAmaru.Yacep.Benchmark", "tests\TupacAmaru.Yacep.Benchmark\TupacAmaru.Yacep.Benchmark.csproj", "{55C89D1F-E076-4D73-B443-DC95F1FDBDDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TupacAmaru.Yacep.Benchmark", "tests\TupacAmaru.Yacep.Benchmark\TupacAmaru.Yacep.Benchmark.csproj", "{55C89D1F-E076-4D73-B443-DC95F1FDBDDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
