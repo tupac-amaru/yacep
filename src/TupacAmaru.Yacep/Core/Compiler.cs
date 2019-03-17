@@ -422,31 +422,15 @@ namespace TupacAmaru.Yacep.Core
                     }
                     break;
                 case ObjectMemberExpression objectMemberExpression:
-                    if (!objectMemberExpression.IsIndexer
-                        && objectMemberExpression.Object is IdentifierExpression obj
-                        && string.Equals("this", obj.Name, StringComparison.Ordinal)
-                        && objectMemberExpression.Member is IdentifierExpression member)
-                    {
-                        compileContext.Cachable = false;
-                        il.Emit(OpCodes.Ldarg_0);
-                        il.Emit(OpCodes.Ldfld, compileContext.ObjectMemberEvaluator);
-                        il.Emit(OpCodes.Ldarg_1);
-                        il.Emit(OpCodes.Ldstr, member.Name);
-                        il.Emit(OpCodes.Ldc_I4_0);
-                        il.Emit(OpCodes.Call, Delegates.EvaluateObjectMemberExpression);
-                    }
+                    il.Emit(OpCodes.Ldarg_0);
+                    il.Emit(OpCodes.Ldfld, compileContext.ObjectMemberEvaluator);
+                    GenerateInstruction(il, objectMemberExpression.Object, compileContext);
+                    if (objectMemberExpression.Member is IdentifierExpression identifierExpr)
+                        il.Emit(OpCodes.Ldstr, identifierExpr.Name);
                     else
-                    {
-                        il.Emit(OpCodes.Ldarg_0);
-                        il.Emit(OpCodes.Ldfld, compileContext.ObjectMemberEvaluator);
-                        GenerateInstruction(il, objectMemberExpression.Object, compileContext);
-                        if (objectMemberExpression.Member is IdentifierExpression identifierExpr)
-                            il.Emit(OpCodes.Ldstr, identifierExpr.Name);
-                        else
-                            GenerateInstruction(il, objectMemberExpression.Member, compileContext);
-                        il.Emit(objectMemberExpression.IsIndexer ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0);
-                        il.Emit(OpCodes.Call, Delegates.EvaluateObjectMemberExpression);
-                    }
+                        GenerateInstruction(il, objectMemberExpression.Member, compileContext);
+                    il.Emit(objectMemberExpression.IsIndexer ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0);
+                    il.Emit(OpCodes.Call, Delegates.EvaluateObjectMemberExpression);
                     break;
                 case ObjectsFunctionCallExpression objectsFunctionCallExpression:
                     il.Emit(OpCodes.Ldarg_0);
@@ -503,7 +487,5 @@ namespace TupacAmaru.Yacep.Core
             var workerType = typeBuilder.CreateTypeInfo().AsType();
             return CreateEvaluator(workerType, workerType.GetMethod(methodName), compileContext);
         }
-
-
     }
 }

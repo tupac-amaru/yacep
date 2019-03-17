@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-namespace TupacAmaru.Yacep.Utils
+namespace TupacAmaru.Yacep.Collections
 {
     internal sealed class MethodInfoEqualityComparer : IEqualityComparer<MethodInfo>
     {
