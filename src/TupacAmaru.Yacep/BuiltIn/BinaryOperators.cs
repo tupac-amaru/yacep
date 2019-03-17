@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using TupacAmaru.Yacep.Collections;
 using TupacAmaru.Yacep.Exceptions;
 using TupacAmaru.Yacep.Symbols;
 using TupacAmaru.Yacep.Utils;

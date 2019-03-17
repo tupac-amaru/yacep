@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TupacAmaru.Yacep.Utils
+namespace TupacAmaru.Yacep.Collections
 {
     internal sealed class TypeEqualityComparer : IEqualityComparer<Type>
     {
@@ -9,7 +9,7 @@ namespace TupacAmaru.Yacep.Utils
 
         internal static readonly TypeEqualityComparer Instance = new TypeEqualityComparer();
 
-        public bool Equals(Type x, Type y) => x.Equals(y);
+        public bool Equals(Type x, Type y) => x == y;
 
         public int GetHashCode(Type obj) => obj.GetHashCode();
     }
