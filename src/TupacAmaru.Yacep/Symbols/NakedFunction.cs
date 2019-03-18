@@ -7,17 +7,17 @@ namespace TupacAmaru.Yacep.Symbols
 
     public class NakedFunction
     {
-        public NakedFunction(string name, NakedFunctionHandler handler, bool cachable = false)
+        public NakedFunction(string name, NakedFunctionHandler handler, bool cacheable = false)
         {
             if (name.ContainsSpace())
                 throw new CannotContainsSpacesException("Naked function name");
             Name = name;
             Handler = handler;
-            Cachable = cachable;
+            Cacheable = cacheable;
         }
 
         public string Name { get; }
         public NakedFunctionHandler Handler { get; }
-        public bool Cachable { get; }
+        public bool Cacheable { get; }
     }
 }

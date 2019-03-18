@@ -4,7 +4,6 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using TupacAmaru.Yacep.Collections;
 using TupacAmaru.Yacep.Exceptions;
 using TupacAmaru.Yacep.Symbols;
 using TupacAmaru.Yacep.Utils;
@@ -14,7 +13,7 @@ namespace TupacAmaru.Yacep.BuiltIn
     public static class StatisticsFunctions
     {
         private static readonly ConcurrentDictionary<Type, Func<decimal, object, decimal>> addToDecimalFunctions
-            = new ConcurrentDictionary<Type, Func<decimal, object, decimal>>(TypeEqualityComparer.Instance);
+            = new ConcurrentDictionary<Type, Func<decimal, object, decimal>>();
 
         private static MethodInfo GetDecimalImplicit(Type type) => typeof(decimal)
             .GetMethods(BindingFlags.Public | BindingFlags.Static).FirstOrDefault(x =>

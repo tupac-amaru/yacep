@@ -29,6 +29,23 @@ namespace TupacAmaru.Yacep.Core
                 return computedValue;
             }
         }
+
+        private abstract class BaseEvaluator : IEvaluator
+        {
+            private readonly object instance;
+            private readonly Func<object, object, object> execute;
+            protected BaseEvaluator(object instance, Func<object, object, object> execute)
+            {
+                this.instance = instance;
+                this.execute = execute;
+            }
+
+            public object Evaluate(object state)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         private sealed class CachableEvaluator : IEvaluator
         {
             private readonly object instance;
@@ -108,7 +125,7 @@ namespace TupacAmaru.Yacep.Core
             private FieldInfo objectMemberEvaluator;
             private FieldInfo functionCaller;
 
-            public bool Cachable { get; set; }
+            public bool Cacheable { get; set; }
             public TypeBuilder TypeBuilder { get; }
             public FieldInfo ConditionEvaluator
             {
@@ -165,7 +182,7 @@ namespace TupacAmaru.Yacep.Core
             public Conjunction<NakedFunctionHandler> Functions { get; } = new Conjunction<NakedFunctionHandler>();
             public CompileContext(TypeBuilder typeBuilder)
             {
-                Cachable = true;
+                Cacheable = true;
                 TypeBuilder = typeBuilder;
             }
         }
@@ -396,8 +413,8 @@ namespace TupacAmaru.Yacep.Core
                     il.Emit(OpCodes.Call, Delegates.HandleUnaryOperator);
                     break;
                 case NakedFunctionCallExpression nakedFunctionCallExpression:
-                    if (!nakedFunctionCallExpression.NakedFunction.Cachable)
-                        compileContext.Cachable = false;
+                    if (!nakedFunctionCallExpression.NakedFunction.Cacheable)
+                        compileContext.Cacheable = false;
                     il.Emit(OpCodes.Ldarg_0);
                     var nakedFunction = nakedFunctionCallExpression.NakedFunction;
                     var nakedFunctionField = GetOrAddValue(compileContext.TypeBuilder, compileContext.Functions, nakedFunction.Name, typeof(NakedFunctionHandler), nakedFunction.Handler);
@@ -406,7 +423,7 @@ namespace TupacAmaru.Yacep.Core
                     il.Emit(OpCodes.Call, Delegates.HandleNakedFunction);
                     break;
                 case IdentifierExpression identifierExpression:
-                    compileContext.Cachable = false;
+                    compileContext.Cacheable = false;
                     if (string.Equals("this", identifierExpression.Name, StringComparison.Ordinal))
                     {
                         il.Emit(OpCodes.Ldarg_1);
@@ -470,7 +487,7 @@ namespace TupacAmaru.Yacep.Core
             var state = Expression.Parameter(typeof(object), "state");
             var callExecute = Expression.Call(Expression.Convert(ins, type), execute, state);
             var func = Expression.Lambda<Func<object, object, object>>(callExecute, "Evaluate", new[] { ins, state }).Compile();
-            return compileContext.Cachable ? (IEvaluator)new CachableEvaluator(instance, func) : new Evaluator(instance, func);
+            return compileContext.Cacheable ? (IEvaluator)new CachableEvaluator(instance, func) : new Evaluator(instance, func);
         }
 
         public IEvaluator Compile(EvaluableExpression expression)
