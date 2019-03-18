@@ -15,7 +15,7 @@ namespace TupacAmaru.Yacep.Benchmark.AtomicValue
         [Params(false, true)]
         public bool WarmUp;
         [Params(false, true)]
-        public bool Cachable;
+        public bool Cacheable;
 
         [GlobalSetup]
         public void Setup()
@@ -26,7 +26,7 @@ namespace TupacAmaru.Yacep.Benchmark.AtomicValue
             {
                 var name = $"f{i}";
                 var value = i;
-                option.AddNakedFunction(name, s => value, Cachable);
+                option.AddNakedFunction(name, s => value, Cacheable);
                 total += value;
                 expr = $"{expr}+{name}()";
             }

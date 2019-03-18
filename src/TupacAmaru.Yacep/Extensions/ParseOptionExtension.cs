@@ -64,7 +64,7 @@ namespace TupacAmaru.Yacep.Extensions
             option.NakedFunctions.Add(function);
             return option;
         }
-        public static ParseOption AddNakedFunction(this ParseOption option, string name, NakedFunctionHandler handler, bool cachable = false)
-            => option.AddNakedFunction(new NakedFunction(name, handler, cachable));
+        public static ParseOption AddNakedFunction(this ParseOption option, string name, NakedFunctionHandler handler, bool cacheable = false)
+            => option.AddNakedFunction(new NakedFunction(name, handler, cacheable));
     }
 }

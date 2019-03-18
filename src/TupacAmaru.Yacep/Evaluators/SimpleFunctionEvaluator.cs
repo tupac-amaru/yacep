@@ -12,11 +12,11 @@ namespace TupacAmaru.Yacep.Evaluators
             if (function is Func<object> justReturn)
                 return justReturn();
             if (function is Func<object, object> oneArgument)
-                return oneArgument.Method.CreateCaller()(oneArgument.Target, argumnets);
+                return oneArgument.Method.AsFunction()(oneArgument.Target, argumnets);
             if (function is Func<object[], object> arrayArgument)
                 return arrayArgument(argumnets);
             if (function is Delegate @delegate)
-                return @delegate.Method.CreateCaller()(@delegate.Target, argumnets);
+                return @delegate.Method.AsFunction()(@delegate.Target, argumnets);
             throw new UnsupportedFunctionException();
         }
     }
