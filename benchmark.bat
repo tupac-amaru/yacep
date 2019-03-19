@@ -6,4 +6,4 @@ dotnet benchmark ./tests/TupacAmaru.Yacep.Benchmark/bin/Release/%targetFramework
 dotnet benchmark ./tests/TupacAmaru.Yacep.Benchmark/bin/Release/%targetFramework%/TupacAmaru.Yacep.Benchmark.dll ^
     -a ./results/benchmark/ -j Short --unrollFactor 4 --invocationCount 8 -r %targetFramework%^
     --warmupCount 1 -i true --strategy %strategy% --stopOnFirstError true -e html ^
-	--iterationCount 200 --filter *FixedFieldBenchmark*
+	--iterationCount 200 --filter *DictionaryBenchmark*

@@ -1,4 +1,4 @@
-﻿namespace TupacAmaru.Yacep.Benchmark
+﻿namespace TupacAmaru.Yacep.Benchmark.CompoundValue.Object.Field
 {
     public class FixtureForField
     {

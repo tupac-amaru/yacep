@@ -5,9 +5,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 using TupacAmaru.Yacep.Extensions;
 
-namespace TupacAmaru.Yacep.Benchmark.CompoundValue.Object
+namespace TupacAmaru.Yacep.Benchmark.CompoundValue.Object.Field
 {
-    public class FixedFieldBenchmark
+    public class FieldBenchmark
     {
         private static readonly char[] chars =
             Enumerable.Range('0', 10)
@@ -20,7 +20,7 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue.Object
         private static readonly IEvaluator evaluator;
         private static readonly Func<FixtureForField, string> reader;
         private static readonly string value;
-        static FixedFieldBenchmark()
+        static FieldBenchmark()
         {
             var obj = Expression.Parameter(typeof(FixtureForField), "fixture");
             var fieldName = "xchjjtool";
@@ -65,6 +65,7 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue.Object
             if (!string.Equals(value, result, StringComparison.Ordinal))
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
         }
+
         [Benchmark]
         public void UseYacep()
         {
