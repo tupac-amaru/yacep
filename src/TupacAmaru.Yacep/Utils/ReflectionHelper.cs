@@ -10,40 +10,16 @@ namespace TupacAmaru.Yacep.Utils
 {
     public static class ReflectionHelper
     {
-        private sealed class TwoType : IEquatable<TwoType>
-        {
-            public Type Type1 { get; }
-            public Type Type2 { get; }
-
-            public TwoType(Type type1, Type type2)
-            {
-                Type1 = type1;
-                Type2 = type2;
-            }
-
-            public bool Equals(TwoType other) => other.Type1 == Type1 && other.Type2 == Type2;
-        }
-        private sealed class TypeAndMemberName : IEquatable<TypeAndMemberName>
-        {
-            public Type Type { get; }
-            public string MemberName { get; }
-            public TypeAndMemberName(Type type, string memberName)
-            {
-                Type = type;
-                MemberName = memberName;
-            }
-            public bool Equals(TypeAndMemberName other) => other.Type == Type && other.MemberName == MemberName;
-        }
         private static readonly ConcurrentDictionary<MethodInfo, Func<object, object[], object>> methodCache
             = new ConcurrentDictionary<MethodInfo, Func<object, object[], object>>();
         private static readonly ConcurrentDictionary<FieldInfo, Func<object, object>> fieldReaderCache
             = new ConcurrentDictionary<FieldInfo, Func<object, object>>();
         private static readonly ConcurrentDictionary<PropertyInfo, Func<object, object>> getterCache
             = new ConcurrentDictionary<PropertyInfo, Func<object, object>>();
-        private static readonly ConcurrentDictionary<TwoType, Func<object, object, object>> indexerCache
-            = new ConcurrentDictionary<TwoType, Func<object, object, object>>();
-        private static readonly ConcurrentDictionary<TypeAndMemberName, Func<object, object>> memberCache
-            = new ConcurrentDictionary<TypeAndMemberName, Func<object, object>>();
+        private static readonly ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>> indexerCache
+            = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, Func<object, object, object>>>();
+        private static readonly ConcurrentDictionary<Type, ConcurrentDictionary<string, Func<object, object>>> memberCache
+            = new ConcurrentDictionary<Type, ConcurrentDictionary<string, Func<object, object>>>();
 
         private static Func<object, object[], object> BuildFunction(MethodInfo methodInfo)
         {
@@ -144,24 +120,22 @@ namespace TupacAmaru.Yacep.Utils
             if (valueType.IsValueType)
             {
                 getValue = Expression.Convert(getValue, typeof(object));
-                return Expression.Lambda<Func<object, object, object>>(getValue, "GetValue", new[] { obj, value }).Compile();
+                return Expression.Lambda<Func<object, object, object>>(getValue, "GetValueReader", new[] { obj, value }).Compile();
             }
-            var getIndexerValue = Expression.Lambda<Func<object, object, object>>(getValue, "GetValue", new[] { obj, value }).Compile();
+            var getIndexerValue = Expression.Lambda<Func<object, object, object>>(getValue, "GetValueReader", new[] { obj, value }).Compile();
             return getIndexerValue;
         }
-        private static Func<object, object, object> BuildIndexer(TwoType twoType)
+        private static Func<object, object, object> BuildIndexer(Type collectionType, Type indexerType)
         {
-            var collectionType = twoType.Type1;
-            var indexerType = twoType.Type2;
             var method = collectionType.GetMethod("Get", new[] { indexerType }) ?? collectionType.GetMethod("get_Item", new[] { indexerType });
             if (method == null) throw new UnsupportedObjectIndexerException(collectionType, indexerType);
             return BuildIndexer(collectionType, indexerType, method);
         }
         public static Func<object, object, object> CreateIndexer(this Type collectionType, Type indexerType, bool addToCache = true)
-        {
-            var twoType = new TwoType(collectionType, indexerType);
-            return addToCache ? indexerCache.GetOrAdd(twoType, BuildIndexer) : BuildIndexer(twoType);
-        }
+            => addToCache ? indexerCache
+                .GetOrAdd(collectionType, t => new ConcurrentDictionary<Type, Func<object, object, object>>())
+                .GetOrAdd(indexerType, m => BuildIndexer(collectionType, m))
+                : BuildIndexer(collectionType, indexerType);
 
         private static Func<object, object> BuildMemberAccessor(Type type, string memberName)
         {
@@ -200,16 +174,10 @@ namespace TupacAmaru.Yacep.Utils
             }
             throw new MemberNotFoundException(type, memberName);
         }
-        private static Func<object, object> BuildMemberAccessor(TypeAndMemberName typeAndMemberName)
-        {
-            var type = typeAndMemberName.Type;
-            var memberName = typeAndMemberName.MemberName;
-            return BuildMemberAccessor(type, memberName);
-        }
-
-        public static Func<object, object> GetValue(this Type type, string memberName)
-            => memberCache.GetOrAdd(new TypeAndMemberName(type, memberName), BuildMemberAccessor);
-        public static Func<object, object> GetValueWithNoCache(this Type type, string memberName)
+        public static Func<object, object> GetValueReader(this Type type, string memberName)
+            => memberCache.GetOrAdd(type, t => new ConcurrentDictionary<string, Func<object, object>>())
+                .GetOrAdd(memberName, m => BuildMemberAccessor(type, m));
+        public static Func<object, object> GetValueReaderWithNoCache(this Type type, string memberName)
             => BuildMemberAccessor(type, memberName);
     }
 }

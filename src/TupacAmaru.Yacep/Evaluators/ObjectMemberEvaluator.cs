@@ -21,7 +21,7 @@ namespace TupacAmaru.Yacep.Evaluators
                     {
                         throw new UnsupportedEmptyNameMembeException(@object.GetType(), true);
                     }
-                    return @object.GetType().GetValue(memberName)(@object);
+                    return @object.GetType().GetValueReader(memberName)(@object);
                 }
                 var type = @object.GetType();
                 var indexerType = member.GetType();
@@ -32,7 +32,7 @@ namespace TupacAmaru.Yacep.Evaluators
                 var memberName = member as string;
                 if (string.IsNullOrWhiteSpace(memberName))
                     throw new UnsupportedEmptyNameMembeException(@object.GetType(), false);
-                return @object.GetType().GetValue(memberName)(@object);
+                return @object.GetType().GetValueReader(memberName)(@object);
             }
         }
     }
