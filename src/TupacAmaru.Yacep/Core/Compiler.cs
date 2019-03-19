@@ -29,23 +29,6 @@ namespace TupacAmaru.Yacep.Core
                 return computedValue;
             }
         }
-
-        private abstract class BaseEvaluator : IEvaluator
-        {
-            private readonly object instance;
-            private readonly Func<object, object, object> execute;
-            protected BaseEvaluator(object instance, Func<object, object, object> execute)
-            {
-                this.instance = instance;
-                this.execute = execute;
-            }
-
-            public object Evaluate(object state)
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         private sealed class CachableEvaluator : IEvaluator
         {
             private readonly object instance;

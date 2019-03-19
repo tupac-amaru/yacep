@@ -1,5 +1,4 @@
-﻿using TupacAmaru.Yacep.Expressions;
-using TupacAmaru.Yacep.Extensions;
+﻿using TupacAmaru.Yacep.Extensions;
 using Xunit;
 
 namespace TupacAmaru.Yacep.Test.Compiler.AtomicValue
