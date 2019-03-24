@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TupacAmaru.Yacep.Test", "te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TupacAmaru.Yacep.Benchmark", "tests\TupacAmaru.Yacep.Benchmark\TupacAmaru.Yacep.Benchmark.csproj", "{55C89D1F-E076-4D73-B443-DC95F1FDBDDC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{D95AFD31-E3A9-4B0E-AE98-702ED503E464}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSample", "samples\WebSample\WebSample.csproj", "{0DD0C04F-6AB3-460B-B7CC-DF19FF65BAAD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +35,10 @@ Global
 		{55C89D1F-E076-4D73-B443-DC95F1FDBDDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55C89D1F-E076-4D73-B443-DC95F1FDBDDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55C89D1F-E076-4D73-B443-DC95F1FDBDDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DD0C04F-6AB3-460B-B7CC-DF19FF65BAAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DD0C04F-6AB3-460B-B7CC-DF19FF65BAAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DD0C04F-6AB3-460B-B7CC-DF19FF65BAAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DD0C04F-6AB3-460B-B7CC-DF19FF65BAAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,6 +47,7 @@ Global
 		{B3531B04-EF62-4408-A856-821C6C50AE60} = {1F652A33-F7E3-48B2-8F58-75D8BCE569B5}
 		{BC23D4DB-9C0C-4088-AAFD-C62BAD9A6A44} = {0D7E07AA-B366-48F8-8E8F-B0E9C3757888}
 		{55C89D1F-E076-4D73-B443-DC95F1FDBDDC} = {0D7E07AA-B366-48F8-8E8F-B0E9C3757888}
+		{0DD0C04F-6AB3-460B-B7CC-DF19FF65BAAD} = {D95AFD31-E3A9-4B0E-AE98-702ED503E464}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {579286CD-55CC-4E9D-A7EB-2A6B85EBD9F4}
