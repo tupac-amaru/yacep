@@ -15,6 +15,7 @@ namespace TupacAmaru.Yacep.Benchmark.AtomicValue
         public int ValueLength;
         [Params(false, true)]
         public bool WarmUp;
+
         [GlobalSetup]
         public void Setup()
         {
@@ -27,6 +28,7 @@ namespace TupacAmaru.Yacep.Benchmark.AtomicValue
                 evaluator.EvaluateAs<decimal>();
             }
         }
+
         [Benchmark]
         public void EvaluateDecimal()
         {

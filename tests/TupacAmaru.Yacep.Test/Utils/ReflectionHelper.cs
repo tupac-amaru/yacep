@@ -33,6 +33,7 @@ namespace TupacAmaru.Yacep.Test.Utils
             Assert.NotNull(adder);
             Assert.Equal(23, adder(new object[] { 12 }));
         }
+
         [Fact(DisplayName = "get object field")]
         public void GetField()
         {
@@ -42,10 +43,25 @@ namespace TupacAmaru.Yacep.Test.Utils
             Assert.Equal(fixture.a, reader(fixture));
             Assert.Throws<FieldNotFoundException>(() => type.GetFieldReader("yu"));
 
+            var fieldInfo = type.GetField(nameof(Fixture.a));
+            reader = fieldInfo.AsReader();
+            Assert.NotNull(reader);
+            Assert.Equal(fixture.a, reader(fixture));
+
+            reader = fieldInfo.AsReader();
+            Assert.NotNull(reader);
+            Assert.Equal(fixture.a, reader(fixture));
+
             var valueReader = type.GetValueReaderWithNoCache("a");
             Assert.NotNull(valueReader);
             Assert.Equal(fixture.a, valueReader(fixture));
+
+            Fixture.staticField = Guid.NewGuid().ToString("n");
+            valueReader = type.GetValueReaderWithNoCache("staticField");
+            Assert.NotNull(valueReader);
+            Assert.Equal(Fixture.staticField, valueReader(null));
         }
+
         [Fact(DisplayName = "get object property")]
         public void GetProperty()
         {
@@ -59,7 +75,13 @@ namespace TupacAmaru.Yacep.Test.Utils
             var valueReader = type.GetValueReaderWithNoCache("D");
             Assert.NotNull(valueReader);
             Assert.Equal(fixture.D, valueReader(fixture));
+
+            Fixture.StaticProperty = Guid.NewGuid().ToString("n");
+            valueReader = type.GetValueReaderWithNoCache("StaticProperty");
+            Assert.NotNull(valueReader);
+            Assert.Equal(Fixture.StaticProperty, valueReader(null));
         }
+
         [Fact(DisplayName = "get dict indexer")]
         public void GetDictionaryIndexer()
         {

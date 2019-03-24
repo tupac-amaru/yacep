@@ -32,6 +32,7 @@ namespace TupacAmaru.Yacep.Benchmark.AtomicValue
                 evaluator.EvaluateAs<decimal>();
             }
         }
+
         [Benchmark]
         public void EvaluateLiteral()
         {

@@ -32,7 +32,7 @@ namespace TupacAmaru.Yacep.Core
         {
             builder.AppendLine(AddPrefix(prefixLength, "object:"));
             Format(objectMemberExpression.Object, prefixLength + count, builder);
-            builder.AppendLine(AddPrefix(prefixLength, $"isIndexer:{objectMemberExpression.IsIndexer}"));
+            builder.AppendLine(AddPrefix(prefixLength, $"member:indexer-{objectMemberExpression.IsIndexer}"));
             Format(objectMemberExpression.Member, prefixLength + count, builder);
         }
 

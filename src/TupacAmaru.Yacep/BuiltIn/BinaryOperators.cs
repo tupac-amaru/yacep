@@ -153,6 +153,7 @@ namespace TupacAmaru.Yacep.BuiltIn
                 return moduloFunctions.GetOrAddFunction(x.GetType(), y.GetType(), Expression.Modulo)(x, y);
             throw new UnsupportedOperationException("%", x, y);
         }
+
         public static readonly BinaryOperator Or = new BinaryOperator("||", OrHandler, 1);
         public static readonly BinaryOperator And = new BinaryOperator("&&", AndHandler, 2);
         public static readonly BinaryOperator Equal = new BinaryOperator("==", EqualHandler, 3);

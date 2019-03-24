@@ -155,18 +155,9 @@ namespace TupacAmaru.Yacep.Utils
                 var callable = BuildFunction(methodInfo);
                 return obj => new Func<object[], object>(arguments => callable(obj, arguments));
             }
-            var dictionaryType = type.GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IDictionary<,>));
-            if (dictionaryType != null)
-            {
-                var genericArguments = dictionaryType.GetGenericArguments();
-                if (genericArguments[0] == typeof(string))
-                {
-                    var getItemMethodInfo = dictionaryType.GetMethod("get_Item");
-                    var indexer = BuildIndexer(type, typeof(string), getItemMethodInfo);
-                    return obj => indexer(obj, memberName);
-                }
-            }
-            var method = type.GetMethod("Get", new[] { typeof(string) }) ?? type.GetMethod("get_Item", new[] { typeof(string) });
+            var method = type.GetMethod("get_Item", new[] { typeof(string) }) ?? type.GetMethod("Get", new[] { typeof(string) }) ??
+                         type.GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IDictionary<,>)
+                                                                  && x.GetGenericArguments()[0] == typeof(string))?.GetMethod("get_Item");
             if (method != null)
             {
                 var indexer = BuildIndexer(type, typeof(string), method);

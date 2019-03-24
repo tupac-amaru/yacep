@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using TupacAmaru.Yacep.Exceptions;
 using TupacAmaru.Yacep.Expressions;
-using TupacAmaru.Yacep.Extensions;
 using TupacAmaru.Yacep.Symbols;
 using TupacAmaru.Yacep.Utils;
 

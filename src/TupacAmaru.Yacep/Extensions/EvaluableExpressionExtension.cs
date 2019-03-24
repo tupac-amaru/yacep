@@ -10,5 +10,7 @@ namespace TupacAmaru.Yacep.Extensions
 
         public static IEvaluator Compile(this EvaluableExpression expr, ICompiler compiler = null)
             => (compiler ?? Compiler.Default).Compile(expr);
+        public static IEvaluator<TState> Compile<TState>(this EvaluableExpression expr, ICompiler compiler = null)
+            => (compiler ?? Compiler.Default).Compile<TState>(expr);
     }
 }

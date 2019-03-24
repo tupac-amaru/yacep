@@ -10,6 +10,31 @@ namespace TupacAmaru.Yacep.Test.Compiler.CompoundValue
 {
     public class CompileObjectExpressionUnitTest
     {
+        [Fact(DisplayName = "compile trick expression")]
+        public void CompileTrick()
+        {
+            var compiler = Core.Compiler.Default;
+            Assert.Equal(4, "('ab'+'cd').Length".ToEvaluableExpression().Compile().Evaluate(null));
+            Assert.Equal(4, "('ab'+'cd').Length".ToEvaluableExpression().Compile(compiler).Evaluate(null));
+
+            Assert.Equal(4, "this[v]['Length']".Compile(
+                ParseOption.CreateOption()
+                    .AddLiteralValue("v", "y")
+                    .AsReadOnly()
+            ).Evaluate(new Fixture { y = "abcd" }));
+            Assert.Equal(4, "this[v]['Len'+'gth']".Compile(
+                ParseOption.CreateOption()
+                    .AddLiteralValue("v", "y")
+                    .AsReadOnly()
+            ).Evaluate(new Fixture { y = "abcd" }));
+            Assert.Equal(4, "('ab'+'cd').Length".Compile().Evaluate(null));
+            Assert.Throws<UnsupportedObjectIndexerException>(() => "this[v]".Compile(
+                ParseOption.CreateOption()
+                    .AddLiteralValue("v", compiler)
+                    .AsReadOnly()
+            ).Evaluate(new Fixture()));
+        }
+
         [Fact(DisplayName = "compile anonymous type object")]
         public void CompileIdentifierFromAnonymousType()
         {
@@ -102,6 +127,10 @@ namespace TupacAmaru.Yacep.Test.Compiler.CompoundValue
                 c = () => "string"
             };
             Assert.Equal(fixture.a, "this.a".Compile().EvaluateAs<string>(fixture));
+            Assert.Equal(fixture.a, "this[thisIsA]".Compile(ParseOption.CreateOption()
+                .AddLiteralValue("thisIsA", "a")
+                .AsReadOnly()
+            ).EvaluateAs<string>(fixture));
             Assert.Equal("aa", "this.a()".Compile().EvaluateAs<string>(new Fixture { a = new Func<string>(() => "aa") }));
             Assert.Equal("aa", "this.D()".Compile().EvaluateAs<string>(new Fixture { D = new Func<string>(() => "aa") }));
             Assert.Equal("12122", "this.D".Compile().EvaluateAs<string>(new Fixture { D = "12122" }));
@@ -114,6 +143,7 @@ namespace TupacAmaru.Yacep.Test.Compiler.CompoundValue
             Assert.Equal(fixture.Add(12), "this.Add(12)".Compile().Evaluate(fixture));
             Assert.Equal(fixture.Add(12), "a.Add(12)".Compile().Evaluate(new { a = fixture }));
             Assert.Equal("1111", "this.f[0]()".Compile().Evaluate(new { f = new object[] { new Func<string>(() => "1111") } }));
+            Assert.Equal(6, "('abc'+d).Length".Compile().Evaluate(new { d = "efg" }));
         }
 
         [Fact(DisplayName = "compile real object")]

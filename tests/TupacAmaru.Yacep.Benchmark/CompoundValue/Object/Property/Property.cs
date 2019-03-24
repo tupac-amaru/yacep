@@ -18,6 +18,7 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue.Object.Property
         private static readonly Random random = new Random();
         private static readonly PropertyInfo propertyInfo;
         private static readonly IEvaluator evaluator;
+        private static readonly IEvaluator<FixtureForProperty> typeEvaluator;
         private static readonly Func<FixtureForProperty, string> reader;
         private static readonly string value;
         static PropertyBenchmark()
@@ -25,6 +26,8 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue.Object.Property
             var propertyName = "Netyui";
             evaluator = $"{propertyName}".Compile();
             evaluator.Evaluate(fixture);
+            typeEvaluator = $"{propertyName}".Compile<FixtureForProperty>();
+            typeEvaluator.Evaluate(fixture);
             var obj = Expression.Parameter(typeof(FixtureForProperty), "fixture");
             propertyInfo = typeof(FixtureForProperty).GetProperty(propertyName);
             reader = Expression.Lambda<Func<FixtureForProperty, string>>(Expression.Property(obj, propertyInfo), "ReadObjectPropertyUseDelegate", new[] { obj }).Compile();
@@ -69,6 +72,14 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue.Object.Property
         public void UseYacep()
         {
             var result = evaluator.Evaluate(fixture) as string;
+            if (!string.Equals(value, result, StringComparison.Ordinal))
+                throw new Exception($"evaluate failed,result:{result},value:{value}");
+        }
+
+        [Benchmark]
+        public void UseTypedCompile()
+        {
+            var result = typeEvaluator.Evaluate(fixture) as string;
             if (!string.Equals(value, result, StringComparison.Ordinal))
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
         }
