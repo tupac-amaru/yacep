@@ -38,6 +38,7 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue
             evaluateSum = $"sum([{expr}])".Compile();
             evaluateAvg = $"avg([{expr}])".Compile();
         }
+
         [Benchmark]
         public void Len()
         {
@@ -45,6 +46,7 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue
             if (result != len)
                 throw new Exception($"evaluate failed,result:{result},len:{len}");
         }
+
         [Benchmark]
         public void Max()
         {
@@ -52,6 +54,7 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue
             if (result != max)
                 throw new Exception($"evaluate failed,result:{result},max:{max}");
         }
+
         [Benchmark]
         public void Min()
         {
@@ -59,6 +62,7 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue
             if (result != min)
                 throw new Exception($"evaluate failed,result:{result},min:{min}");
         }
+
         [Benchmark]
         public void Sum()
         {
@@ -66,6 +70,7 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue
             if (result != sum)
                 throw new Exception($"evaluate failed,result:{result},sum:{sum}");
         }
+
         [Benchmark]
         public void Avg()
         {

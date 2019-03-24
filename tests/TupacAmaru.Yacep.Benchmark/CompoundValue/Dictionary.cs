@@ -30,7 +30,8 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue
         private string value;
         private string key;
         private IEvaluator evaluator;
-        [Params(10, 50, 100, 1000, 10000)]
+        private IEvaluator<Dictionary<string, string>> typeEvaluator;
+        [Params(10, 100, 1000)]
         public int ItemCount;
 
         [GlobalSetup]
@@ -44,6 +45,8 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue
             value = dictionary[key];
             evaluator = $"this['{key}']".Compile();
             evaluator.Evaluate(dictionary);
+            typeEvaluator = $"this['{key}']".Compile<Dictionary<string, string>>();
+            typeEvaluator.Evaluate(dictionary);
         }
 
 
@@ -84,6 +87,14 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue
         public void UseYacep()
         {
             var result = evaluator.Evaluate(dictionary) as string;
+            if (!string.Equals(value, result, StringComparison.Ordinal))
+                throw new Exception($"evaluate failed,result:{result},value:{value}");
+        }
+
+        [Benchmark]
+        public void UseTypedCompile()
+        {
+            var result = typeEvaluator.Evaluate(dictionary) as string;
             if (!string.Equals(value, result, StringComparison.Ordinal))
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
         }

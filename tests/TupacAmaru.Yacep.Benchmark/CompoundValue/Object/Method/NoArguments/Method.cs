@@ -11,6 +11,7 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue.Object.Method.NoArguments
         private static readonly FixtureForMethod fixture = new FixtureForMethod();
         private static readonly MethodInfo methodInfo;
         private static readonly IEvaluator evaluator;
+        private static readonly IEvaluator<FixtureForMethod> typeEvaluator;
         private static readonly Func<FixtureForMethod, string> reader;
         private static readonly string value;
         static NoArgumentsMethodBenchmark()
@@ -18,6 +19,8 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue.Object.Method.NoArguments
             var methodName = "Netyui";
             evaluator = $"this.{methodName}()".Compile();
             evaluator.Evaluate(fixture);
+            typeEvaluator = $"this.{methodName}()".Compile<FixtureForMethod>();
+            typeEvaluator.Evaluate(fixture);
             var obj = Expression.Parameter(typeof(FixtureForMethod), "fixture");
             methodInfo = typeof(FixtureForMethod).GetMethod(methodName);
             reader = Expression.Lambda<Func<FixtureForMethod, string>>(Expression.Call(obj, methodInfo), "InvokeObjectMethodUseDelegate", new[] { obj }).Compile();
@@ -61,6 +64,14 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue.Object.Method.NoArguments
         public void UseYacep()
         {
             var result = evaluator.Evaluate(fixture) as string;
+            if (!string.Equals(value, result, StringComparison.Ordinal))
+                throw new Exception($"evaluate failed,result:{result},value:{value}");
+        }
+
+        [Benchmark]
+        public void UseTypedCompile()
+        {
+            var result = typeEvaluator.Evaluate(fixture) as string;
             if (!string.Equals(value, result, StringComparison.Ordinal))
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
         }

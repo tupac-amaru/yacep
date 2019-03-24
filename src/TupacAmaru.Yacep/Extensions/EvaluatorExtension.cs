@@ -44,11 +44,25 @@ namespace TupacAmaru.Yacep.Extensions
             }
             return (T)(value.As(typeof(T)));
         }
-
         public static object EvaluateAsType(this IEvaluator evaluator, object state, Type type) =>
             evaluator.Evaluate(state).As(type);
-
         public static object EvaluateAsType(this IEvaluator evaluator, Type type) =>
             evaluator.Evaluate(null).As(type);
+
+
+        public static TReturn EvaluateAs<TState, TReturn>(this IEvaluator<TState> evaluator, TState state)
+        {
+            var value = evaluator.Evaluate(state);
+            switch (value)
+            {
+                case null:
+                    return default;
+                case TReturn tValue:
+                    return tValue;
+            }
+            return (TReturn)(value.As(typeof(TReturn)));
+        }
+        public static object EvaluateAsType<TState>(this IEvaluator<TState> evaluator, TState state, Type type) =>
+            evaluator.Evaluate(state).As(type);
     }
 }

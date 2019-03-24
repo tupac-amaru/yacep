@@ -25,6 +25,7 @@ namespace TupacAmaru.Yacep.Benchmark.AtomicValue
             value = new string(Enumerable.Range(0, StringLength).Select(x => chars[random.Next(0, chars.Length)]).ToArray());
             evaluator = $"'{value}'".Compile();
         }
+
         [Benchmark]
         public void EvaluateString()
         {

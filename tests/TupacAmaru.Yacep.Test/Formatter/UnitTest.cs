@@ -3,19 +3,29 @@ using System.Linq;
 using TupacAmaru.Yacep.Expressions;
 using TupacAmaru.Yacep.Extensions;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace TupacAmaru.Yacep.Test.Formatter
 {
+    
+
     public class UnitTest
     {
-        [Fact(DisplayName = "formatter format test")]
-        public void Format()
+        private readonly ITestOutputHelper _testOutputHelper;
+
+        public UnitTest(ITestOutputHelper testOutputHelper)
+        {
+            _testOutputHelper = testOutputHelper;
+        }
+
+       
+        [Fact(DisplayName = "format long expression test")]
+        public void FormatLongExpression()
         {
             Assert.Equal("", (null as EvaluableExpression).ToPrettyString());
             var expr = "(10.5+23E4+2/max(a,b,c))||(true&&false)&&(12%5+x.a+x.b+y['a']+len(['1',2,null,'3'])?+(-(!a)):(null||(1 in (1,2+2,avg(3,m['a'](2),m.func(11,2))))))";
             var expression = expr.ToEvaluableExpression();
-            var expected =
-                @"type: Binary
+            var expected = @"type: Binary
 operator: ||
 left:
     type: Binary
@@ -25,11 +35,11 @@ left:
         operator: +
         left:
             type: Constant
-            value: 10.5(Single)
+            value: 10.5(Decimal)
             raw: 10.5
         right:
             type: Constant
-            value: 230000(Single)
+            value: 230000(Decimal)
             raw: 23E4
     right:
         type: Binary
@@ -95,7 +105,7 @@ right:
                             object:
                                 type: Identifier
                                 name: x
-                            isIndexer:False
+                            member:indexer-False
                                 type: Identifier
                                 name: a
                     right:
@@ -103,7 +113,7 @@ right:
                         object:
                             type: Identifier
                             name: x
-                        isIndexer:False
+                        member:indexer-False
                             type: Identifier
                             name: b
                 right:
@@ -111,7 +121,7 @@ right:
                     object:
                         type: Identifier
                         name: y
-                    isIndexer:True
+                    member:indexer-True
                         type: Constant
                         value: a(String)
                         raw: a
@@ -194,7 +204,7 @@ right:
                                         object:
                                             type: Identifier
                                             name: m
-                                        isIndexer:True
+                                        member:indexer-True
                                             type: Constant
                                             value: a(String)
                                             raw: a
@@ -210,7 +220,7 @@ right:
                                         object:
                                             type: Identifier
                                             name: m
-                                        isIndexer:False
+                                        member:indexer-False
                                             type: Identifier
                                             name: func
                                 arguments:
@@ -225,7 +235,7 @@ right:
 ";
             var expectedArray = expected.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
             var actualArray = expression.ToPrettyString().Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-            Assert.False(actualArray.Select((current, index) => current.Equals(expectedArray[index])).FirstOrDefault(x => !x));
+            Assert.True(actualArray.Select((current, index) => current.Equals(expectedArray[index])).All(x => x));
         }
     }
 }
