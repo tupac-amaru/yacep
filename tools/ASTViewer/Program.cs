@@ -1,19 +1,21 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Swifter.Json;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 using Swifter.Readers;
 using Swifter.RW;
 using Swifter.Writers;
 using TupacAmaru.Yacep;
+using TupacAmaru.Yacep.Extensions;
 using TupacAmaru.Yacep.Core;
 using TupacAmaru.Yacep.Symbols;
 
-namespace WebSample
+namespace ASTViewer
 {
     public class Program
     {
@@ -44,6 +46,8 @@ namespace WebSample
 
         private static void Route(IApplicationBuilder app)
         {
+            var dir = Path.Combine(AppContext.BaseDirectory, "www/dist");
+            app.UseStaticFiles(new StaticFileOptions { FileProvider = new PhysicalFileProvider(dir) });
             app.Run(async context =>
             {
                 var parser = context.RequestServices.GetService<IParser>();
@@ -51,9 +55,9 @@ namespace WebSample
                 var req = context.Request;
                 var resp = context.Response;
                 var method = req.Method;
-                if (!string.Equals(method, "POST"))
+                if (!string.Equals(method, "POST") || !req.Path.StartsWithSegments("/api"))
                 {
-                    resp.StatusCode = 404;
+                    resp.Redirect("/index.html", true);
                 }
                 else
                 {
@@ -63,12 +67,20 @@ namespace WebSample
                         var expr = reader.ReadToEnd();
                         try
                         {
-                            var result = parser.Parse(expr);
+                            var expression = parser.Parse(expr);
+                            var result = new
+                            {
+                                ast = expression,
+                                str = expression.ToPrettyString()
+                            };
                             await resp.WriteAsync(formatter.Serialize(result));
                         }
                         catch (Exception e)
                         {
-                            await resp.WriteAsync(formatter.Serialize(e.Message));
+                            await resp.WriteAsync(formatter.Serialize(new
+                            {
+                                error = e.Message
+                            }));
                         }
                     }
                 }

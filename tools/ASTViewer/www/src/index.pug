@@ -1,0 +1,51 @@
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        meta(name='viewport',content='width=device-width, initial-scale=1.0')
+        meta(content='ie=edge',http-equiv='X-UA-Compatible')
+        title ASTViewer-yacep
+        style(type="text/css").
+            body,dd,div,dl,dt,form,h1,h2,h3,h4,h5,h6,html,input,li,ol,p,select,td,textarea,th,ul{margin:0;padding:0}
+            body,html{min-height:100%;width:100%;height:100%;background:#f6f8fa}
+            #viewer,.container{width:100%;height:100%}
+            @-webkit-keyframes spin{0%,15%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}
+            @keyframes spin{0%,15%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}
+            .loading-cover{width:100%;height:100%;position:absolute;top:0;left:0;z-index:22;background:#24292e;}
+            .spinner-container{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+            .loading-text{user-select:none;margin-top:2em;text-align:center;color:#f7f7f7}
+            .fade-out{transition:opacity 1s linear;opacity:0}
+            .loading-effect{bottom:0;height:60px;left:0;margin:auto;right:0;top:0;width:100px}
+            .loader-line-wrap{-webkit-animation:spin 2s cubic-bezier(.175,.885,.32,1.275) infinite;animation:spin 2s cubic-bezier(.175,.885,.32,1.275) infinite;-webkit-box-sizing:border-box;box-sizing:border-box;height:50px;left:0;overflow:hidden;position:absolute;top:0;-webkit-transform-origin:50% 100%;transform-origin:50% 100%;width:100px}
+            .loader-line-wrap>.loader-line{border:5px solid transparent;border-radius:100%;-webkit-box-sizing:border-box;box-sizing:border-box;height:100px;left:0;margin:0 auto;position:absolute;right:0;top:0;width:100px}
+            .loader-line-wrap:nth-child(1){-webkit-animation-delay:-50ms;animation-delay:-50ms}
+            .loader-line-wrap:nth-child(1)>.loader-line{border-color:#ea4747;height:90px;width:90px;top:7px}
+            .loader-line-wrap:nth-child(2){-webkit-animation-delay:-.1s;animation-delay:-.1s}
+            .loader-line-wrap:nth-child(2)>.loader-line{border-color:#eaea47;height:76px;width:76px;top:14px}
+            .loader-line-wrap:nth-child(3){-webkit-animation-delay:-150ms;animation-delay:-150ms}
+            .loader-line-wrap:nth-child(3)>.loader-line{border-color:#47ea47;height:62px;width:62px;top:21px}
+            .loader-line-wrap:nth-child(4){-webkit-animation-delay:-.2s;animation-delay:-.2s}
+            .loader-line-wrap:nth-child(4)>.loader-line{border-color:#47eaea;height:48px;width:48px;top:28px}
+            .loader-line-wrap:nth-child(5){-webkit-animation-delay:-250ms;animation-delay:-250ms}
+            .loader-line-wrap:nth-child(5)>.loader-line{border-color:#4747ea;height:34px;width:34px;top:35px}
+    body
+        .container
+            #viewer
+            .loading-cover
+               .spinner-container
+                 .loading-effect
+                   .loader-line-wrap
+                     .loader-line
+                   .loader-line-wrap
+                     .loader-line
+                   .loader-line-wrap
+                     .loader-line
+                   .loader-line-wrap
+                     .loader-line
+                   .loader-line-wrap
+                     .loader-line
+                 .loading-text Loading....
+            script(src="//unpkg.com/react@16/umd/react.production.min.js")
+            script(src="//unpkg.com/react-dom@16/umd/react-dom.production.min.js")
+            script(src="//unpkg.com/axios@0.14.0/dist/axios.min.js")
+            script(src='index.js', type= 'text/javascript')
