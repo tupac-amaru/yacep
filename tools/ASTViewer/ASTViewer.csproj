@@ -32,10 +32,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+ 
 
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="pushd $(ProjectDir)www&#xD;&#xA;call npm install&#xD;&#xA;call npm run build&#xD;&#xA;popd" />
-  </Target>
 
 </Project>
