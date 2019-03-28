@@ -15,10 +15,10 @@ namespace TupacAmaru.Yacep
             NotAllowedIndexerExpression = notAllowedIndexerExpression;
             NotAllowedInExpression = notAllowedInExpression;
             NotAllowedConvertUnsignedInteger = notAllowedConvertUnsignedInteger;
-            UnaryOperators = new ReadOnlyCollection<UnaryOperator>(unaryOperators.Select(x => x).ToList());
-            BinaryOperators = new ReadOnlyCollection<BinaryOperator>(binaryOperators.Select(x => x).ToList());
-            LiteralValues = new ReadOnlyCollection<LiteralValue>(literalValues.Select(x => x).ToList());
-            NakedFunctions = new ReadOnlyCollection<NakedFunction>(nakedFunctions.Select(x => x).ToList());
+            UnaryOperators = new ReadOnlyCollection<UnaryOperator>(unaryOperators.Any() ? unaryOperators.Select(x => x).ToList() : new List<UnaryOperator>());
+            BinaryOperators = new ReadOnlyCollection<BinaryOperator>(binaryOperators.Any() ? binaryOperators.Select(x => x).ToList() : new List<BinaryOperator>());
+            LiteralValues = new ReadOnlyCollection<LiteralValue>(literalValues.Any() ? literalValues.Select(x => x).ToList() : new List<LiteralValue>());
+            NakedFunctions = new ReadOnlyCollection<NakedFunction>(nakedFunctions.Any() ? nakedFunctions.Select(x => x).ToList() : new List<NakedFunction>());
         }
 
         public bool NotAllowedArrayExpression { get; }

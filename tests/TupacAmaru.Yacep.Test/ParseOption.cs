@@ -40,5 +40,22 @@ namespace TupacAmaru.Yacep.Test
             Parallel.For(0, 100, i => values.Clear());
             Assert.Equal(0, values.Count);
         }
+
+        [Fact(DisplayName = "parse option don't throw exception when create an empty option")]
+        public void ParseOptionCollectionEmpty()
+        {
+            var option = new ParseOption().AsReadOnly();
+            Assert.False(option.NotAllowedInExpression);
+            Assert.False(option.NotAllowedConditionExpression);
+            Assert.False(option.NotAllowedMemberExpression);
+            Assert.False(option.NotAllowedIndexerExpression);
+            Assert.False(option.NotAllowedInExpression);
+            Assert.False(option.NotAllowedConvertUnsignedInteger);
+
+            Assert.True(!option.UnaryOperators.Any());
+            Assert.True(!option.BinaryOperators.Any());
+            Assert.True(!option.LiteralValues.Any());
+            Assert.True(!option.NakedFunctions.Any());
+        }
     }
 }

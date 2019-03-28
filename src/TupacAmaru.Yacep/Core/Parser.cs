@@ -99,8 +99,10 @@ namespace TupacAmaru.Yacep.Core
                 index = 0;
                 se = sourceExpression;
                 this.option = option;
-                maxUnaryOperatorLength = (from item in option.UnaryOperators select item.Operator.Length).Max(x => x);
-                maxBinaryOperatorLength = (from item in option.BinaryOperators select item.Operator.Length).Max(x => x);
+                maxUnaryOperatorLength = option.UnaryOperators.Any() ?
+                    (from item in option.UnaryOperators select item.Operator.Length).Max(x => x) : 0;
+                maxBinaryOperatorLength = option.BinaryOperators.Any() ?
+                    (from item in option.BinaryOperators select item.Operator.Length).Max(x => x) : 0;
             }
             private static bool IsIdentifierStart(char chr) => chr == '$' || chr == '_' || char.IsLetter(chr);
             private static bool IsIdentifierPart(char chr) => IsIdentifierStart(chr) || char.IsDigit(chr);
@@ -128,7 +130,7 @@ namespace TupacAmaru.Yacep.Core
                         }
                     }
                     --checkLength;
-                    if (checkLength == 0) break;
+                    if (checkLength < 0) break;
                 }
                 @operator = null;
                 return false;
@@ -558,4 +560,3 @@ namespace TupacAmaru.Yacep.Core
         }
     }
 }
-

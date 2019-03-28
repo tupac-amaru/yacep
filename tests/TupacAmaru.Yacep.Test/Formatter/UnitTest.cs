@@ -3,22 +3,11 @@ using System.Linq;
 using TupacAmaru.Yacep.Expressions;
 using TupacAmaru.Yacep.Extensions;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace TupacAmaru.Yacep.Test.Formatter
 {
-    
-
     public class UnitTest
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-
-        public UnitTest(ITestOutputHelper testOutputHelper)
-        {
-            _testOutputHelper = testOutputHelper;
-        }
-
-       
         [Fact(DisplayName = "format long expression test")]
         public void FormatLongExpression()
         {
@@ -231,9 +220,8 @@ right:
                                     1:
                                         type: Constant
                                         value: 2(Int32)
-                                        raw: 2
-";
-            var expectedArray = expected.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+                                        raw: 2";
+            var expectedArray = expected.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             var actualArray = expression.ToPrettyString().Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             Assert.True(actualArray.Select((current, index) => current.Equals(expectedArray[index])).All(x => x));
         }
