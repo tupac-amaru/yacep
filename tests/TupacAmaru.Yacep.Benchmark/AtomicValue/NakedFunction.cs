@@ -38,10 +38,12 @@ namespace TupacAmaru.Yacep.Benchmark.AtomicValue
         }
 
         [Benchmark]
-        public void EvaluateNakedFunction()
+        public decimal EvaluateNakedFunction()
         {
             var result = evaluator.EvaluateAs<decimal>();
-            if (result != total) throw new Exception($"evaluate failed,result:{result},total:{total}");
-        } 
+            if (result != total)
+                throw new Exception($"evaluate failed,result:{result},total:{total}");
+            return result;
+        }
     }
 }

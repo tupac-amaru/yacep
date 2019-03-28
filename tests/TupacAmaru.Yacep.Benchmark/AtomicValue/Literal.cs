@@ -11,7 +11,7 @@ namespace TupacAmaru.Yacep.Benchmark.AtomicValue
         [Params(5, 10, 20, 30)]
         public int LiteralCount;
         [Params(false, true)]
-        public bool WarmUp; 
+        public bool WarmUp;
 
         [GlobalSetup]
         public void Setup()
@@ -24,7 +24,7 @@ namespace TupacAmaru.Yacep.Benchmark.AtomicValue
                 var value = i;
                 total += value;
                 expr = $"{expr}+{name}";
-                option.AddLiteralValue(name, value );
+                option.AddLiteralValue(name, value);
             }
             evaluator = expr.Compile(option.AsReadOnly());
             if (WarmUp)
@@ -34,11 +34,12 @@ namespace TupacAmaru.Yacep.Benchmark.AtomicValue
         }
 
         [Benchmark]
-        public void EvaluateLiteral()
+        public decimal EvaluateLiteral()
         {
             var result = evaluator.EvaluateAs<decimal>();
             if (result != total)
                 throw new Exception($"evaluate failed,result:{result},total:{total}");
+            return result;
         }
     }
 }

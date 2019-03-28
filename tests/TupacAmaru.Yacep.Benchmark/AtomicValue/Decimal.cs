@@ -30,11 +30,12 @@ namespace TupacAmaru.Yacep.Benchmark.AtomicValue
         }
 
         [Benchmark]
-        public void EvaluateDecimal()
+        public decimal EvaluateDecimal()
         {
             var result = evaluator.EvaluateAs<decimal>();
             if (result != value)
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
+            return result;
         }
     }
 }

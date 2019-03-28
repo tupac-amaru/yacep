@@ -36,52 +36,58 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue.Object.Property
         }
 
         [Benchmark]
-        public void DirectRead()
+        public string DirectRead()
         {
             var result = fixture.Netyui;
             if (!string.Equals(value, result, StringComparison.Ordinal))
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
+            return result;
         }
 
         [Benchmark]
-        public void UseDelegate()
+        public string UseDelegate()
         {
             var result = reader(fixture);
             if (!string.Equals(value, result, StringComparison.Ordinal))
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
+            return result;
         }
 
         [Benchmark]
-        public void UseDynamic()
+        public string UseDynamic()
         {
             dynamic r = fixture;
             var result = r.Netyui;
             if (!string.Equals(value, result, StringComparison.Ordinal))
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
+            return result;
         }
 
         [Benchmark]
-        public void UseReflection()
+        public string UseReflection()
         {
             var result = propertyInfo.GetValue(fixture) as string;
             if (!string.Equals(value, result, StringComparison.Ordinal))
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
+            return result;
         }
 
         [Benchmark]
-        public void UseYacep()
+        public string UseYacep()
         {
             var result = evaluator.Evaluate(fixture) as string;
             if (!string.Equals(value, result, StringComparison.Ordinal))
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
+            return result;
         }
 
         [Benchmark]
-        public void UseTypedCompile()
+        public string UseTypedCompile()
         {
             var result = typeEvaluator.Evaluate(fixture) as string;
             if (!string.Equals(value, result, StringComparison.Ordinal))
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
+            return result;
         }
     }
 }

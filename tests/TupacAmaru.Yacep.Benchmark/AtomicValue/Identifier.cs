@@ -39,11 +39,12 @@ namespace TupacAmaru.Yacep.Benchmark.AtomicValue
         }
 
         [Benchmark]
-        public void EvaluateIdentifier()
+        public decimal EvaluateIdentifier()
         {
             var result = evaluator.EvaluateAs<decimal>(state);
             if (result != total)
                 throw new Exception($"evaluate failed,result:{result},total:{total}");
+            return result;
         }
     }
 }

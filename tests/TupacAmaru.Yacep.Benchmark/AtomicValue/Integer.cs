@@ -29,10 +29,12 @@ namespace TupacAmaru.Yacep.Benchmark.AtomicValue
         }
 
         [Benchmark]
-        public void EvaluateInteger()
+        public int EvaluateInteger()
         {
             var result = evaluator.EvaluateAs<int>();
-            if (result != value) throw new Exception($"evaluate failed,result:{result},value:{value}");
+            if (result != value)
+                throw new Exception($"evaluate failed,result:{result},value:{value}");
+            return result;
         }
     }
 }

@@ -27,11 +27,12 @@ namespace TupacAmaru.Yacep.Benchmark.AtomicValue
         }
 
         [Benchmark]
-        public void EvaluateString()
+        public string EvaluateString()
         {
             var result = evaluator.EvaluateAs<string>();
             if (!string.Equals(value, result, StringComparison.Ordinal))
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
+            return result;
         }
     }
 }

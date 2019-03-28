@@ -51,52 +51,58 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue
 
 
         [Benchmark]
-        public void DirectRead()
+        public string DirectRead()
         {
             var result = dictionary[key];
             if (!string.Equals(value, result, StringComparison.Ordinal))
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
+            return result;
         }
 
         [Benchmark]
-        public void UseDelegate()
+        public string UseDelegate()
         {
             var result = reader(dictionary, key);
             if (!string.Equals(value, result, StringComparison.Ordinal))
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
+            return result;
         }
 
         [Benchmark]
-        public void UseDynamic()
+        public string UseDynamic()
         {
             dynamic r = dictionary;
             var result = r[key];
             if (!string.Equals(value, result, StringComparison.Ordinal))
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
+            return result;
         }
 
         [Benchmark]
-        public void UseReflection()
+        public string UseReflection()
         {
             var result = methodInfo.Invoke(dictionary, new object[] { key }) as string;
             if (!string.Equals(value, result, StringComparison.Ordinal))
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
+            return result;
         }
 
         [Benchmark]
-        public void UseYacep()
+        public string UseYacep()
         {
             var result = evaluator.Evaluate(dictionary) as string;
             if (!string.Equals(value, result, StringComparison.Ordinal))
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
+            return result;
         }
 
         [Benchmark]
-        public void UseTypedCompile()
+        public string UseTypedCompile()
         {
             var result = typeEvaluator.Evaluate(dictionary) as string;
             if (!string.Equals(value, result, StringComparison.Ordinal))
                 throw new Exception($"evaluate failed,result:{result},value:{value}");
+            return result;
         }
     }
 }

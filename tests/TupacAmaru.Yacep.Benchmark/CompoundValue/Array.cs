@@ -40,43 +40,48 @@ namespace TupacAmaru.Yacep.Benchmark.CompoundValue
         }
 
         [Benchmark]
-        public void Len()
+        public int Len()
         {
             var result = evaluateLen.EvaluateAs<int>();
             if (result != len)
                 throw new Exception($"evaluate failed,result:{result},len:{len}");
+            return result;
         }
 
         [Benchmark]
-        public void Max()
+        public int Max()
         {
             var result = evaluateMax.EvaluateAs<int>();
             if (result != max)
                 throw new Exception($"evaluate failed,result:{result},max:{max}");
+            return result;
         }
 
         [Benchmark]
-        public void Min()
+        public int Min()
         {
             var result = evaluateMin.EvaluateAs<int>();
             if (result != min)
                 throw new Exception($"evaluate failed,result:{result},min:{min}");
+            return result;
         }
 
         [Benchmark]
-        public void Sum()
+        public int Sum()
         {
             var result = evaluateSum.EvaluateAs<int>();
             if (result != sum)
                 throw new Exception($"evaluate failed,result:{result},sum:{sum}");
+            return result;
         }
 
         [Benchmark]
-        public void Avg()
+        public decimal Avg()
         {
             var result = evaluateAvg.EvaluateAs<decimal>();
             if (result != avg)
                 throw new Exception($"evaluate failed,result:{result},avg:{avg}");
+            return result;
         }
     }
 }
