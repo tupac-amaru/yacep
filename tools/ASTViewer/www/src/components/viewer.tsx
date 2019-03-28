@@ -40,7 +40,7 @@ export class Viewer extends React.Component<{}, {
 
     render() {
         const self = this;
-        const ast = self.state.resp ? (self.state.resp.str || self.state.resp.error || '') : '';
+        const ast = self.state.resp ? (self.state.resp || '') : '';
         return <div className={style["viewer-container"]}>
             <div className={style["left-container"]}>
                 <div className={style["input-container"]}>
