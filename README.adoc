@@ -1,5 +1,10 @@
 # *YACEP* : yet another csharp expression parser
 
+
+- travis-ci image:https://travis-ci.com/tupac-amaru/yacep.svg?branch=master["Build Status", link="https://travis-ci.com/tupac-amaru/yacep"]
+
+- codecov.io image:https://codecov.io/gh/tupac-amaru/yacep/branch/master/graph/badge.svg["Build Status", link="https://codecov.io/gh/tupac-amaru/yacep"]
+
 *YACEP* is a small and tiny csharp expression parser , can parse a valid single-line string to an abstract syntax tree. It also provides a simple compiler that can compile an abstract syntax tree to an `IEvaluator` instance, 
 `IEvaluator` instance can be executed as C# delegate.
 
