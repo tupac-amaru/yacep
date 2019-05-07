@@ -1,9 +1,8 @@
 # *YACEP* : yet another csharp expression parser
 
-
-- travis-ci image:https://travis-ci.com/tupac-amaru/yacep.svg?branch=master["Build Status", link="https://travis-ci.com/tupac-amaru/yacep"]
-
-- codecov.io image:https://codecov.io/gh/tupac-amaru/yacep/branch/master/graph/badge.svg["Build Status", link="https://codecov.io/gh/tupac-amaru/yacep"]
+image:https://dev.azure.com/tupac-amaru/yacep/_apis/build/status/tupac-amaru.yacep?branchName=master["Build Status", link="https://dev.azure.com/tupac-amaru/yacep/_build/latest?definitionId=5&branchName=master"]
+image:https://codecov.io/gh/tupac-amaru/yacep/branch/master/graph/badge.svg["Build Status", link="https://codecov.io/gh/tupac-amaru/yacep"]
+image:https://img.shields.io/github/license/tupac-amaru/yacep.svg["License",link="https://opensource.org/licenses/MIT"]
 
 *YACEP* is a small and tiny csharp expression parser , can parse a valid single-line string to an abstract syntax tree. It also provides a simple compiler that can compile an abstract syntax tree to an `IEvaluator` instance, 
 `IEvaluator` instance can be executed as C# delegate.
@@ -73,9 +72,4 @@ var value = evaluator.EvaluateAs<decimal>(state); //1988
 |https://docs.microsoft.com/en-us/dotnet/api/system.object?view=netstandard-2.0[Object]
 |mapping a literal to a value. 
 |=======
-
-
-
-## License
-MIT license
 

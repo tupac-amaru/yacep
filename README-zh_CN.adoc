@@ -1,5 +1,8 @@
 # _YACEP_ : yet another csharp expression parser
 
+image:https://dev.azure.com/tupac-amaru/yacep/_apis/build/status/tupac-amaru.yacep?branchName=master["Build Status", link="https://dev.azure.com/tupac-amaru/yacep/_build/latest?definitionId=5&branchName=master"]
+image:https://codecov.io/gh/tupac-amaru/yacep/branch/master/graph/badge.svg["Build Status", link="https://codecov.io/gh/tupac-amaru/yacep"]
+image:https://img.shields.io/github/license/tupac-amaru/yacep.svg["License",link="https://opensource.org/licenses/MIT"]
 
 ## 简介
 _YACEP_ 是一个轻量级的表达式解析库。 它能读取字符串并转换成一棵抽象语法树. 同时添加了把抽象语法树转换成一段可以执行的代码的能力。
@@ -24,8 +27,3 @@ int result = "x + y".Compile().EvaluateAs<int>(new { x = 1, y = 2 });
 - **内置三目运算符** - 就和C#中的 https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/conditional-operator[?:] 一样
 - **内置in操作符** - 查看一个对象是否在一个序列中
 - **支持索引器** - 支持使用索引器来访问对象的方法，属性，字段等，对于字典数组等原生支持使用索引器访问元素
-
-
-## License
-MIT license
-
