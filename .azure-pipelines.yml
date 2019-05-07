@@ -1,0 +1,68 @@
+trigger:
+  branches:
+    include:
+    - '*' 
+
+variables:
+  solution: 'yacep.sln'
+  buildConfiguration: 'Release'
+  dotnetCoreVersion: '2.2.203'
+
+
+jobs:
+- job: Linux
+  pool:
+    vmImage: 'ubuntu-16.04'
+  steps:
+    - task: DotNetCoreInstaller@0
+      displayName: '.NET install'
+      inputs:
+        version: '$(dotnetCoreVersion)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Install coverlet.console'
+      inputs:
+        command: custom
+        custom: tool
+        arguments: 'install -g coverlet.console'
+    - task: DotNetCoreCLI@2
+      displayName: 'Install Codecov.Tool'
+      inputs:
+        command: custom
+        custom: tool
+        arguments: 'install -g Codecov.Tool'
+    - task: DotNetCoreCLI@2
+      displayName: '.NET build'
+      inputs:
+        command: build
+        projects: '$(solution)'
+        arguments: '--configuration $(buildConfiguration)'
+    - script: dotnet test ./tests/TupacAmaru.Yacep.Test/TupacAmaru.Yacep.Test.csproj  /p:CollectCoverage=true /p:Exclude=\"[xunit.*]*,[TupacAmaru.Yacep.Test*]*\" /p:CoverletOutputFormat=\"opencover\" /p:CoverletOutput=$(Agent.WorkFolder)/coverage/
+      displayName: '.NET unit tests'
+    - script: codecov -f "$(Agent.WorkFolder)/coverage/coverage.opencover.xml" -t $(codecov.token)
+      displayName: 'Upload coverage report'
+
+- job: Windows
+  pool:
+    vmImage: 'windows-2019'
+  steps:
+    - task: DotNetCoreInstaller@0
+      displayName: '.NET install'
+      inputs:
+        version: '$(dotnetCoreVersion)'
+    - task: DotNetCoreCLI@2
+      displayName: '.NET build'
+      inputs:
+        command: build
+        projects: '$(solution)'
+        arguments: '--configuration $(buildConfiguration)'
+    - task: DotNetCoreCLI@2
+      displayName: '.NET unit tests'
+      inputs:
+        command: test
+        projects: '**/tests/TupacAmaru.Yacep.Test/*.csproj'
+        arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+    - task: PublishTestResults@2
+      displayName: 'collect code coverage' 
+      inputs:
+        testRunner: VSTest
+        testResultsFiles: '$(Agent.WorkFolder)/**/*.trx'

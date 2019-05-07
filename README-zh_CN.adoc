@@ -1,6 +1,5 @@
 # _YACEP_ : yet another csharp expression parser
 
-_YACEP_ 是一个非常小的表达式解析库 , 它读取字符串并转换成一棵抽象语法树. 同时它能把抽象语法树转换成 `IEvaluator` 对象. `IEvaluator` 对象可以接受表达式需要的参数,并执行表达式.
 
 示例代码
 
@@ -35,41 +34,7 @@ var value = evaluator.EvaluateAs<decimal>(state);
 - **自定义函数** - 支持自定义函数
 - **内置三目运算符** - 就和C#中的 https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/conditional-operator[?:] 一样
 - **内置in操作符** - 查看一个对象是否在一个序列中
-- **索引器** - 支持使用索引器来访问对象的方法，属性，字段等，对于字典数组等原生支持使用索引器访问元素
-
- 
-
-## 表达式值类型 - 直接从字符串中读取的值
-
-**重要!!!** 在 _YACEP_ 中是没有带符号数字的,因为符号 `-` 可以被重定义为其他意义. 但是为了方便广大C#开发者的使用习惯,内部会按照值的大小在读取的时候动态转换类型. 如果一个整数大于 https://docs.microsoft.com/en-us/dotnet/api/system.uint32.maxvalue?view=netstandard-2.0[4294967295] 会被读取为 `ulong` 类型,如果还大于 https://docs.microsoft.com/en-us/dotnet/api/system.int32.maxvalue?view=netstandard-2.0[2147483648] 就会被读取为 `integer` 类型,否则就会读取为 `int` 类型.
- 
-.数据类型 
-|=======
-|表达式值类型|C#值类型| 描述 
-
-|ulong 
-|https://docs.microsoft.com/en-us/dotnet/api/system.uint64?view=netstandard-2.0[UInt64]
-|如果一个整数大于 https://docs.microsoft.com/en-us/dotnet/api/system.uint32.maxvalue?view=netstandard-2.0[4294967295] 会被读取为 `ulong` 类型. :point_down:
-|integer 
-|https://docs.microsoft.com/en-us/dotnet/api/system.uint32?view=netstandard-2.0[UInt32]
-|如果还大于 https://docs.microsoft.com/en-us/dotnet/api/system.int32.maxvalue?view=netstandard-2.0[2147483648] 就会被读取为 `integer` 类型 :point_down:
-|int 
-|https://docs.microsoft.com/en-us/dotnet/api/system.int32?view=netstandard-2.0[Int32]
-|小于 https://docs.microsoft.com/en-us/dotnet/api/system.int32.maxvalue?view=netstandard-2.0[2147483648] 的数值
-|decimal 
-|https://docs.microsoft.com/en-us/dotnet/api/system.decimal?view=netstandard-2.0[Decimal]
-| 浮点型数据
-|string 
-|https://docs.microsoft.com/en-us/dotnet/api/system.string?view=netstandard-2.0[String]
-|UTF-16字符串. 单引号和双引号都支持
-|array
-|https://docs.microsoft.com/en-us/dotnet/api/system.array?view=netstandard-2.0[Object Array]
-|Object数组
-|literal
-|https://docs.microsoft.com/en-us/dotnet/api/system.object?view=netstandard-2.0[Object]
-|被设置为映射到其他的值的字面量
-|=======
-
+- **支持索引器** - 支持使用索引器来访问对象的方法，属性，字段等，对于字典数组等原生支持使用索引器访问元素
 
 
 ## License
