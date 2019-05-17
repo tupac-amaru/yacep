@@ -1,12 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../version.props" />
   <PropertyGroup>
-    <VersionPrefix>0.0.1</VersionPrefix>
+    <PackageId>TupacAmaru.Yacep</PackageId>
+    <AssemblyName>TupacAmaru.Yacep</AssemblyName>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyTitle>yacep</AssemblyTitle>
+    <Description>yet another csharp expression parser</Description>
+    <PackageTags>expression;parser;netstandard;core</PackageTags>
+    <Product>TupacAmaru.Yacep</Product>
+    <Description>Yacep is a small and tiny csharp expression parser, can parse a valid single-line string to an abstract syntax tree. It also provides a simple compiler that can compile an abstract syntax tree to an IEvaluator instance, IEvaluator instance can be executed as C# delegate.</Description>
+    <Copyright>Copyright (c) 2019 TupacAmaru. All rights reserved.</Copyright>
+    <Authors>TupacAmaru</Authors>
+    <PackageProjectUrl>https://github.com/tupac-amaru/yacep</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/tupac-amaru/yacep/master/icon.png</PackageIconUrl>
+    <license>https://opensource.org/licenses/MIT</license>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/tupac-amaru/yacep</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <IsPackable>true</IsPackable>
     <LangVersion>7.2</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
-    <PackageReference Include="System.Memory" Version="4.5.2" />
+    <PackageReference Include="System.Memory" Version="4.5.3" />
   </ItemGroup>
 </Project>

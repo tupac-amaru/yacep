@@ -1,0 +1,9 @@
+language: csharp
+dist: bionic
+mono: none
+solution: yacep.sln
+dotnet: 2.2.203
+sudo: required
+script:
+  - dotnet restore
+  - dotnet test --configuration Release ./tests/TupacAmaru.Yacep.Test/TupacAmaru.Yacep.Test.csproj 
