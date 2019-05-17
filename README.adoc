@@ -2,7 +2,11 @@
 
 image:https://dev.azure.com/tupac-amaru/yacep/_apis/build/status/tupac-amaru.yacep?branchName=master["Build Status", link="https://dev.azure.com/tupac-amaru/yacep/_build/latest?definitionId=5&branchName=master"]
 image:https://codecov.io/gh/tupac-amaru/yacep/branch/master/graph/badge.svg["Build Status", link="https://codecov.io/gh/tupac-amaru/yacep"]
-image:https://img.shields.io/github/license/tupac-amaru/yacep.svg["License",link="https://opensource.org/licenses/MIT"]
+image:https://travis-ci.com/tupac-amaru/yacep.svg?branch=master["Build Status", link="https://travis-ci.com/tupac-amaru/yacep"]
+image:https://img.shields.io/appveyor/ci/wushilong/yacep.svg?color=#49bb1e[AppVeyor, link="https://ci.appveyor.com/project/wushilong/yacep/branch/master"]
+image:https://img.shields.io/appveyor/tests/wushilong/yacep.svg?color=#49bb1e[AppVeyor tests, link="https://ci.appveyor.com/project/wushilong/yacep/branch/master"]
+image:https://img.shields.io/nuget/v/TupacAmaru.Yacep.svg?color=#49bb1e[Nuget, link="https://www.nuget.org/packages/TupacAmaru.Yacep"]
+image:https://img.shields.io/github/license/tupac-amaru/yacep.svg?color=#49bb1e["License",link="https://opensource.org/licenses/MIT"]
 
 *YACEP* is a small and tiny csharp expression parser , can parse a valid single-line string to an abstract syntax tree. It also provides a simple compiler that can compile an abstract syntax tree to an `IEvaluator` instance, 
 `IEvaluator` instance can be executed as C# delegate.

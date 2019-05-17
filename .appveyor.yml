@@ -1,0 +1,13 @@
+version: '1.0.{build}'
+image: Ubuntu
+branches:
+  only:
+  - master
+before_test:
+  - cmd: dotnet --version
+  - cmd: dotnet restore --verbosity m
+  - cmd: dotnet build --configuration Release ./tests/TupacAmaru.Yacep.Test/TupacAmaru.Yacep.Test.csproj --verbosity m
+test:
+  assemblies:
+    - ./tests/TupacAmaru.Yacep.Test/bin/Release/**/TupacAmaru.Yacep.Test.dll
+deploy: off
