@@ -29,17 +29,17 @@ _YACEP_ not supported multi-line expressions and will not be supported in the fu
 - I found a very interesting thing when using https://www.docker.com/[docker], https://casbin.org/[Casbin]. After reading the source code of https://casbin.org/[Casbin], found that https://casbin.org/[Casbin] used a very simple DSL to solve a series of authorization problems. You can see it on https://casbin.org/[Casbin]'s official website. There are many implementations of the language, but the work of the .net platform https://github.com/Devolutions/casbin-net[Casbin-Net] has been in the WIP state for long time. After reading the source code of https://github.com/Devolutions/casbin-net[Casbin-Net], I found that the library did not continue to write down because it could not find a good expression parser. So I used a simplified  https://en.wikibooks.org/wiki/Algorithms/Hill_Climbing[hill climbing] algorithm to write a simple implementation.
 
 ## Features
+- **Out of the box** - Zero-Configuration 
 - **Custom unary operator** - support custom a string as an unary operator
 - **Custom binary operator** - support custom a string as a binary operator and set an https://en.wikipedia.org/wiki/Order_of_operations#Programming_language[order] for it
 - **Custom literal** - support custom a literal as a value
 - **Custom function** - support custom function
 - **Conditional expression** - like https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/conditional-operator[?:] operator in C#
 - **In expression** - evaluates to true if it finds a variable in an array and false otherwise
-- **Out of the box** - Zero-Configuration 
 - **Cross platform** - build with https://github.com/dotnet/standard/blob/master/docs/versions/netstandard2.0.md[netstandard2.0]
 - **Small and tiny** - the core parser code is only 500+ lines 
 - **Low consumption** - use https://docs.microsoft.com/en-za/dotnet/api/system.readonlyspan-1?view=netcore-2.2[ReadOnlySpan<T> Struct] to read string
-- **High Performance** - good performance to access object's public method, field, property value instance over using C# reflection
+- **High Performance** - good performance to access object's public method, field, property value instance over using C# reflection. https://github.com/tupac-amaru/yacep/tree/benchmark[Benchmark Report]
 
 ## Quick Start
 https://github.com/tupac-amaru/yacep/wiki[Document]
