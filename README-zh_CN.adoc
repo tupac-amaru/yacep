@@ -1,3 +1,5 @@
+link:README.adoc[English (United States)] | 中文
+
 # _YACEP_ : yet another csharp expression parser
 
 image:https://dev.azure.com/tupac-amaru/yacep/_apis/build/status/tupac-amaru.yacep?branchName=master["Build Status", link="https://dev.azure.com/tupac-amaru/yacep/_build/latest?definitionId=5&branchName=master"]
@@ -12,23 +14,144 @@ image:https://img.shields.io/github/license/tupac-amaru/yacep.svg?color=#49bb1e[
 ## 简介
 _YACEP_ 是一个轻量级的表达式解析库。 能够将一段有效的字符串并转换成一棵抽象语法树. 同时具备把抽象语法树转换成一段可以执行的代码的能力。
 
+[IMPORTANT] 
+_YACEP_ 不支持多行表达式，以后也不会支持，因为如果需要多行表达式，个人推荐使用 https://github.com/IronLanguages[IronLanguages]
+
 示例代码
 
 [source,csharp]
 ----
-"x+', '+y".Compile().EvaluateAs<string>(new { x = "hello", y = "world" });// 
+"x+', '+y".Compile().EvaluateAs<string>(new { x = "hello", y = "world" });
+// value is  "hello, world"
+"x + y".Compile().EvaluateAs<int>(new { x = 1, y = 2 });
+// value is  3
 ----
+
+### 为什么会写这样一个库？
+- 在使用 https://www.docker.com/[docker] 的时候看到了一个很好玩的东西 https://casbin.org/[Casbin], 在读过 https://casbin.org/[Casbin] 的源码之后, 发现 https://casbin.org/[Casbin] 使用了一种极其简单的DSL解决一系列授权问题. 在 https://casbin.org/[Casbin] 的官网上可以看到已经有很多门语言的实现, 但是.net平台的工作 https://github.com/Devolutions/casbin-net[Casbin-Net] 一直处于WIP状态. 在读了 https://github.com/Devolutions/casbin-net[Casbin-Net] 的源码之后, 发现这个库没有再继续写下去的原因是因为找不到一个好用的表达式解析库. 所以就使用简化之后 https://en.wikibooks.org/wiki/Algorithms/Hill_Climbing[爬山算法] 写了一个简单的实现.
 
 ## 特性
 - **开箱即用** - 零配置
-- **跨平台** - 基于 https://github.com/dotnet/standard/blob/master/docs/versions/netstandard2.0.md[netstandard2.0] 构建
-- **轻量级** - 核心的转换代码只有500多行
-- **低消耗** - 使用了 https://docs.microsoft.com/en-za/dotnet/api/system.readonlyspan-1?view=netcore-2.2[ReadOnlySpan<T> Struct] 来解析字符串
-- **快** - 相对于使用反射, _YACEP_ 使用 https://docs.microsoft.com/zh-cn/dotnet/api/system.reflection.emit?view=netstandard-2.0[emit] 用创建动态代理的方式来访问对象公开的方法,属性,字段.
-- **支持自定义一元操作符** - 支持指定任意字符串为一元操作符
-- **支持自定义二元操作符** - 支持指定任意字符串为带 https://en.wikipedia.org/wiki/Order_of_operations#Programming_language[优先级] 二元操作符  
-- **支持自定义字面量** - 支持自定义字面量
-- **支持自定义函数** - 支持自定义函数
+- **自定义一元操作符** - 支持指定字符串为一元操作符
+- **自定义二元操作符** - 支持指定字符串为二元操作符, 且支持 https://en.wikipedia.org/wiki/Order_of_operations#Programming_language[优先级] 
+- **自定义字面量** - 支持自定义字面量
+- **自定义函数** - 支持自定义函数
 - **内置三目运算符** - 就和C#中的 https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/conditional-operator[?:] 一样
 - **内置in操作符** - 查看一个对象是否在一个序列中
 - **支持索引器** - 支持使用索引器来访问对象的方法，属性，字段等，对于字典数组等原生支持使用索引器访问元素
+- **跨平台** - 基于 https://github.com/dotnet/standard/blob/master/docs/versions/netstandard2.0.md[netstandard2.0] 构建
+- **轻量级** - 核心代码500+
+- **低消耗** - 使用了 https://docs.microsoft.com/en-za/dotnet/api/system.readonlyspan-1?view=netcore-2.2[ReadOnlySpan<T> Struct] 来解析字符串
+- **高性能** - 相对于使用反射, _YACEP_ 使用 https://docs.microsoft.com/zh-cn/dotnet/api/system.reflection.emit?view=netstandard-2.0[emit] 用创建动态代理的方式来访问对象公开的方法,属性,字段.
+
+## 快速上手
+https://github.com/tupac-amaru/yacep/wiki[详细文档]
+
+- 创建一个控制台项目
+[source,shell]
+----
+mkdir yacep-demo
+cd yacep-demo
+dotnet new console
+----
+
+- 添加依赖TupacAmaru.Yacep
+[source,shell]
+----
+dotnet add package TupacAmaru.Yacep
+----
+
+- 修改Program.cs的内容
+[source,shell]
+----
+cat>Program.cs<<EOF
+using TupacAmaru.Yacep.Extensions;
+
+namespace yacep_demo
+{
+    class Program
+    {
+        static void Main()
+          => System.Console.WriteLine("x+', '+y".Compile().EvaluateAs<string>(new { x = "hello", y = "world" }));
+    }
+}
+EOF
+----
+#### _如果是windows系统，请复制以下内容到Program.cs中_
+
+[source,csharp]
+----
+using TupacAmaru.Yacep.Extensions;
+
+namespace yacep_demo
+{
+    class Program
+    {
+        static void Main()
+          => System.Console.WriteLine("x+', '+y".Compile().EvaluateAs<string>(new { x = "hello", y = "world" }));
+    }
+}
+----
+
+
+- 运行项目
+[source,shell]
+----
+dotnet run
+----
+#### _看到输出 `hello, world` 就说明已经成功了_
+
+## 项目构建
+- 下载源码
+[source,shell]
+----
+git clone https://github.com/tupac-amaru/yacep.git
+----
+
+- 运行测试 https://github.com/tonerdo/coverlet[Coverlet] https://github.com/danielpalme/ReportGenerator[ReportGenerator ]
+
+### Linux & Mac
+[source,shell]
+----
+cd yacep
+./coverage.sh
+----
+
+### Windows
+[source,shell]
+----
+cd yacep
+.\coverage.bat
+----
+
+- 运行基准测试
+https://github.com/dotnet/BenchmarkDotNet[BenchmarkDotNet]
+
+### Linux & Mac
+[source,shell]
+----
+cd yacep
+./benchmark.sh
+----
+
+### Windows
+[source,shell]
+----
+cd yacep
+.\benchmark.bat
+----
+
+## 鸣谢
+
+### 工具&库
+- https://github.com/xunit/xunit[xUnit.net]: 测试框架
+- https://github.com/dotnet/BenchmarkDotNet[BenchmarkDotNet]: 性能基准测试库
+- https://github.com/tonerdo/coverlet[Coverlet]: 代码测试覆盖率库
+- https://github.com/danielpalme/ReportGenerator[ReportGenerator]: 测试覆盖率报表转换工具
+
+### 服务
+- https://dev.azure.com/[Azure DevOps]
+- https://codecov.io/[Codecov]
+- https://travis-ci.com[travis-ci]
+- https://www.appveyor.com/[AppVeyor]
+- https://sonarcloud.io/about[SonarCloud]
