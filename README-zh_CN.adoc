@@ -4,18 +4,19 @@ image:https://dev.azure.com/tupac-amaru/yacep/_apis/build/status/tupac-amaru.yac
 image:https://codecov.io/gh/tupac-amaru/yacep/branch/master/graph/badge.svg["Build Status", link="https://codecov.io/gh/tupac-amaru/yacep"]
 image:https://travis-ci.com/tupac-amaru/yacep.svg?branch=master["Build Status", link="https://travis-ci.com/tupac-amaru/yacep"]
 image:https://img.shields.io/appveyor/ci/wushilong/yacep.svg?color=#49bb1e[AppVeyor, link="https://ci.appveyor.com/project/wushilong/yacep/branch/master"]
+image:https://img.shields.io/sonar/https/sonarcloud.io/tupac-amaru_yacep/quality_gate.svg?color=#49bb1e[Sonar Quality Gate, link="https://sonarcloud.io/dashboard?id=tupac-amaru_yacep"]
 image:https://img.shields.io/appveyor/tests/wushilong/yacep.svg?color=#49bb1e[AppVeyor tests, link="https://ci.appveyor.com/project/wushilong/yacep/branch/master"]
 image:https://img.shields.io/nuget/v/TupacAmaru.Yacep.svg?color=#49bb1e[Nuget, link="https://www.nuget.org/packages/TupacAmaru.Yacep"]
 image:https://img.shields.io/github/license/tupac-amaru/yacep.svg?color=#49bb1e["License",link="https://opensource.org/licenses/MIT"]
 
 ## 简介
-_YACEP_ 是一个轻量级的表达式解析库。 它能读取字符串并转换成一棵抽象语法树. 同时添加了把抽象语法树转换成一段可以执行的代码的能力。
+_YACEP_ 是一个轻量级的表达式解析库。 能够将一段有效的字符串并转换成一棵抽象语法树. 同时具备把抽象语法树转换成一段可以执行的代码的能力。
 
 示例代码
 
 [source,csharp]
 ----
-int result = "x + y".Compile().EvaluateAs<int>(new { x = 1, y = 2 });
+"x+', '+y".Compile().EvaluateAs<string>(new { x = "hello", y = "world" });// 
 ----
 
 ## 特性

@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="../../version.props" />
   <PropertyGroup>
+    <ProjectGuid>{B3531B04-EF62-4408-A856-821C6C50AE60}</ProjectGuid>
     <PackageId>TupacAmaru.Yacep</PackageId>
     <AssemblyName>TupacAmaru.Yacep</AssemblyName>
     <TargetFramework>netstandard2.0</TargetFramework>
