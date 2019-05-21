@@ -42,7 +42,7 @@ _YACEP_ 不支持多行表达式，以后也不会支持. 如果需要多行表�
 - **跨平台** - 基于 https://github.com/dotnet/standard/blob/master/docs/versions/netstandard2.0.md[netstandard2.0] 构建
 - **轻量级** - 核心代码500+
 - **低消耗** - 使用了 https://docs.microsoft.com/en-za/dotnet/api/system.readonlyspan-1?view=netcore-2.2[ReadOnlySpan<T> Struct] 来解析字符串
-- **高性能** - 相对于使用反射, _YACEP_ 使用 https://docs.microsoft.com/zh-cn/dotnet/api/system.reflection.emit?view=netstandard-2.0[emit] 用创建动态代理的方式来访问对象公开的方法,属性,字段.
+- **高性能** - 相对于使用反射, _YACEP_ 使用 https://docs.microsoft.com/zh-cn/dotnet/api/system.reflection.emit?view=netstandard-2.0[emit] 用创建动态代理的方式来访问对象公开的方法,属性,字段. https://github.com/tupac-amaru/yacep/tree/benchmark[基准测试报告]
 
 ## 快速上手
 https://github.com/tupac-amaru/yacep/wiki[详细文档]

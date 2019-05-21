@@ -1,3 +1,6 @@
+branches:
+  only:
+  - master
 language: csharp
 dist: bionic
 mono: none

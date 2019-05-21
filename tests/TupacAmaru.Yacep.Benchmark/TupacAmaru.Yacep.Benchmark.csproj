@@ -3,6 +3,7 @@
   <PropertyGroup>
     <ProjectGuid>{55C89D1F-E076-4D73-B443-DC95F1FDBDDC}</ProjectGuid>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <IsPackable>false</IsPackable>
     <SonarQubeExclude>true</SonarQubeExclude>
   </PropertyGroup>
 
