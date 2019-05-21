@@ -333,3 +333,4 @@ ASALocalRun/
 /tools/ASTViewer/www/dist
 /tools/ASTViewer/www/package-lock.json
 /tools/ASTViewer/output
+/.sonarqube
