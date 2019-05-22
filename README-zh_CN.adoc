@@ -16,7 +16,7 @@ image:https://img.shields.io/github/license/tupac-amaru/yacep.svg?color=#49bb1e[
 _YACEP_ 是一个轻量级的表达式解析库。 能够将一段有效的字符串并转换成一棵抽象语法树. 同时具备把抽象语法树转换成一段可以执行的代码的能力。
 
 [IMPORTANT] 
-_YACEP_ 不支持多行表达式，以后也不会支持，因为如果需要多行表达式，个人推荐使用 https://github.com/IronLanguages[IronLanguages]
+_YACEP_ 不支持多行表达式，以后也不会支持. 如果需要多行表达式，个人推荐使用 https://github.com/IronLanguages[IronLanguages]
 
 示例代码
 
