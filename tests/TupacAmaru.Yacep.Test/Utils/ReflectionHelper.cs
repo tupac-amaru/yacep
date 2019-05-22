@@ -15,7 +15,7 @@ namespace TupacAmaru.Yacep.Test.Utils
             var type = typeof(int[]);
             var indexer = type.CreateIndexer(typeof(int), false);
             var array = new[] { 34, 5, 78, 121 };
-            Assert.Equal(array[1], indexer(array, 1));
+            Assert.Equal(array[1], indexer(array, 2));
         }
 
         [Fact(DisplayName = "get object function")]
