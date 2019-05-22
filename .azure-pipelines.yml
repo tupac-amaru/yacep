@@ -10,74 +10,86 @@ variables:
 
 
 jobs:
-- job: Linux
-  pool:
-    vmImage: 'ubuntu-16.04'
-  steps:
-    - task: DotNetCoreInstaller@0
-      displayName: '.NET install'
-      inputs:
-        version: '$(dotnetCoreVersion)'
-    - task: DotNetCoreCLI@2
-      displayName: 'Install coverlet.console'
-      inputs:
-        command: custom
-        custom: tool
-        arguments: 'install -g coverlet.console'
-    - task: DotNetCoreCLI@2
-      displayName: 'Install Codecov.Tool'
-      inputs:
-        command: custom
-        custom: tool
-        arguments: 'install -g Codecov.Tool'
-    - task: DotNetCoreCLI@2
-      displayName: 'Install SonarScanner '
-      inputs:
-        command: custom
-        custom: tool
-        arguments: 'install -g dotnet-sonarscanner'
-    - script: dotnet sonarscanner begin /k:"tupac-amaru_yacep" /o:"tupac-amaru" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="$(sonarcloud.token)" /d:sonar.cs.opencover.reportsPaths="$(Agent.WorkFolder)/coverage/coverage.opencover.xml"
-      displayName: 'Config sonarscanner'    
-    - task: DotNetCoreCLI@2
-      displayName: '.NET build'
-      inputs:
-        command: build
-        projects: '$(solution)'
-        arguments: '--configuration $(buildConfiguration)'
-    - script: dotnet test ./tests/TupacAmaru.Yacep.Test/TupacAmaru.Yacep.Test.csproj  /p:CollectCoverage=true /p:Exclude=\"[xunit.*]*,[TupacAmaru.Yacep.Test*]*\" /p:CoverletOutputFormat=\"opencover\" /p:CoverletOutput=$(Agent.WorkFolder)/coverage/
-      displayName: '.NET unit tests'
-    - script: dotnet sonarscanner end /d:sonar.login="$(sonarcloud.token)"
-      displayName: 'Upload sonarscanner report'
-    - script: codecov -f "$(Agent.WorkFolder)/coverage/coverage.opencover.xml" -t $(codecov.token)
-      displayName: 'Upload coverage report'
-
-- job: Windows
-  pool:
-    vmImage: 'windows-2019'
-  steps:
-    - task: DotNetCoreInstaller@0
-      displayName: '.NET install'
-      inputs:
-        version: '$(dotnetCoreVersion)'
-    - task: DotNetCoreCLI@2
-      displayName: '.NET build'
-      inputs:
-        command: build
-        projects: '$(solution)'
-        arguments: '--configuration $(buildConfiguration)'
-    - task: DotNetCoreCLI@2
-      displayName: '.NET unit tests'
-      inputs:
-        command: test
-        projects: '**/tests/TupacAmaru.Yacep.Test/*.csproj'
-        arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
-    - task: PublishTestResults@2
-      displayName: 'collect code coverage' 
-      inputs:
-        testRunner: VSTest
-        testResultsFiles: '$(Agent.WorkFolder)/**/*.trx'
-        
 - ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
+  - job: Linux
+    pool:
+      vmImage: 'ubuntu-16.04'
+    steps:
+      - task: DotNetCoreInstaller@0
+        displayName: '.NET install'
+        inputs:
+          version: '$(dotnetCoreVersion)'
+      - task: DotNetCoreCLI@2
+        displayName: 'Install coverlet.console'
+        inputs:
+          command: custom
+          custom: tool
+          arguments: 'install -g coverlet.console'
+      - task: DotNetCoreCLI@2
+        displayName: 'Install Codecov.Tool'
+        inputs:
+          command: custom
+          custom: tool
+          arguments: 'install -g Codecov.Tool'
+      - task: DotNetCoreCLI@2
+        displayName: 'Install dotnet-reportgenerator-globaltool'
+        inputs:
+          command: custom
+          custom: tool
+          arguments: 'install -g dotnet-reportgenerator-globaltool'
+      - task: DotNetCoreCLI@2
+        displayName: 'Install sonarscanner'
+        inputs:
+          command: custom
+          custom: tool
+          arguments: 'install -g dotnet-sonarscanner'
+      - script: dotnet sonarscanner begin /k:"tupac-amaru_yacep" /o:"tupac-amaru" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="$(sonarcloud.token)" /d:sonar.cs.opencover.reportsPaths="$(Agent.WorkFolder)/coverage/coverage.opencover.xml"
+        displayName: 'Config sonarscanner'    
+      - task: DotNetCoreCLI@2
+        displayName: '.NET build'
+        inputs:
+          command: build
+          projects: '$(solution)'
+          arguments: '--configuration $(buildConfiguration)'
+      - script: dotnet test ./tests/TupacAmaru.Yacep.Test/TupacAmaru.Yacep.Test.csproj --configuration $(buildConfiguration) /p:CollectCoverage=true /p:Exclude=\"[xunit.*]*,[TupacAmaru.Yacep.Test*]*\" /p:CoverletOutputFormat=\"opencover\" /p:CoverletOutput=$(Agent.WorkFolder)/coverage/
+        displayName: '.NET unit tests'
+      - script: dotnet sonarscanner end /d:sonar.login="$(sonarcloud.token)"
+        displayName: 'Upload sonarscanner report'
+      - script: codecov -f "$(Agent.WorkFolder)/coverage/coverage.opencover.xml" -t $(codecov.token)
+        displayName: 'Upload coverage report to codecov'
+      - script: reportgenerator  "-reports:$(Agent.WorkFolder)/coverage/coverage.opencover.xml" "-targetdir:$(Agent.WorkFolder)/coverage/reports" -reporttypes:Cobertura 
+        displayName: 'Generate cobertura report'
+      - task: PublishCodeCoverageResults@1
+        displayName: 'Upload azure pipeline code coverage report' 
+        inputs:
+          codeCoverageTool: cobertura
+          summaryFileLocation: $(Agent.WorkFolder)/coverage/reports/Cobertura.xml
+  - job: Windows
+    pool:
+      vmImage: 'windows-2019'
+    steps:
+      - task: DotNetCoreInstaller@0
+        displayName: '.NET install'
+        inputs:
+          version: '$(dotnetCoreVersion)'
+      - task: DotNetCoreCLI@2
+        displayName: '.NET build'
+        inputs:
+          command: build
+          projects: '$(solution)'
+          arguments: '--configuration $(buildConfiguration)'
+      - task: DotNetCoreCLI@2
+        displayName: '.NET unit tests'
+        inputs:
+          command: test
+          publishTestResults: false
+          projects: '**/tests/TupacAmaru.Yacep.Test/*.csproj'
+          arguments: '--configuration $(buildConfiguration) --logger trx --results-directory $(Agent.WorkFolder)'
+      - task: PublishTestResults@2
+        displayName: 'Upload unit test report' 
+        inputs:
+          testRunner: VSTest
+          testResultsFiles: '$(Agent.WorkFolder)/**/*.trx'  
   - job: Benchmark
     pool:
       vmImage: 'ubuntu-16.04'
