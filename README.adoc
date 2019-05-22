@@ -12,6 +12,9 @@ image:https://img.shields.io/appveyor/tests/wushilong/yacep.svg?color=#49bb1e[Ap
 image:https://img.shields.io/nuget/v/TupacAmaru.Yacep.svg?color=#49bb1e[Nuget, link="https://www.nuget.org/packages/TupacAmaru.Yacep"]
 image:https://img.shields.io/github/license/tupac-amaru/yacep.svg?color=#49bb1e["License",link="https://opensource.org/licenses/MIT"]
 
+- https://github.com/tupac-amaru/yacep/wiki[Document]
+- https://github.com/tupac-amaru/yacep/tree/benchmark[Benchmark report]
+
 _YACEP_ is a small and tiny csharp expression parser, can parse a valid single-line string to an abstract syntax tree. It also provides a simple compiler that can compile an abstract syntax tree to an `IEvaluator` instance, 
 `IEvaluator` instance can be executed as C# delegate.
 
@@ -40,7 +43,7 @@ _YACEP_ not supported multi-line expressions and will not be supported in the fu
 - **Cross platform** - build with https://github.com/dotnet/standard/blob/master/docs/versions/netstandard2.0.md[netstandard2.0]
 - **Small and tiny** - the core parser code is only 500+ lines 
 - **Low consumption** - use https://docs.microsoft.com/en-za/dotnet/api/system.readonlyspan-1?view=netcore-2.2[ReadOnlySpan<T> Struct] to read string
-- **High Performance** - good performance to access object's public method, field, property value instance over using C# reflection. https://github.com/tupac-amaru/yacep/tree/benchmark[Benchmark Report]
+- **High Performance** - good performance to access object's public method, field, property value instance over using C# reflection. https://github.com/tupac-amaru/yacep/tree/benchmark[Benchmark report]
 
 ## Quick Start
 https://github.com/tupac-amaru/yacep/wiki[Document]
