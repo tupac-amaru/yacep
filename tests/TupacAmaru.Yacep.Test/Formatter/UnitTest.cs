@@ -221,9 +221,9 @@ right:
                                         type: Constant
                                         value: 2(Int32)
                                         raw: 2";
-            var expectedArray = expected.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-            var actualArray = expression.ToPrettyString().Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-            Assert.True(actualArray.Select((current, index) => current.Equals(expectedArray[index])).All(x => x));
+            var expectedArray = expected.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries); 
+            var actualArray = expression.ToPrettyString().Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries); 
+            Assert.True(actualArray.Select((current, index) => current.TrimEnd('\r','\n').Equals(expectedArray[index].TrimEnd('\r','\n'))).All(x => x));
         }
     }
 }
