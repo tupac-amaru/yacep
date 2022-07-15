@@ -8,14 +8,14 @@ trigger:
 variables:
   solution: 'yacep.sln'
   buildConfiguration: 'Release'
-  dotnetCoreVersion: '3.1.421'
+  dotnetCoreVersion: '6.0.302'
 
 
 jobs:
 - ${{ if ne(variables['Build.SourceBranchName'], 'master') }}:
   - job: StatusChecksOnLinux
     pool:
-      vmImage: 'ubuntu-16.04'
+      vmImage: 'ubuntu-22.04'
     steps:
       - task: DotNetCoreInstaller@0
         displayName: '.NET install'
@@ -78,7 +78,7 @@ jobs:
 - ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
   - job: Linux
     pool:
-      vmImage: 'ubuntu-16.04'
+      vmImage: 'ubuntu-22.04'
     steps:
       - task: DotNetCoreInstaller@0
         displayName: '.NET install'
@@ -151,7 +151,7 @@ jobs:
           testResultsFiles: '$(Agent.WorkFolder)/*.trx'  
   - job: Benchmark
     pool:
-      vmImage: 'ubuntu-16.04'
+      vmImage: 'ubuntu-22.04'
     steps:
       - task: DotNetCoreInstaller@0
         displayName: '.NET install'
@@ -244,7 +244,7 @@ jobs:
       - Linux
       - Windows
     pool:
-      vmImage: 'ubuntu-16.04' 
+      vmImage: 'ubuntu-22.04' 
     variables:
       isPushblish: false 
     steps:

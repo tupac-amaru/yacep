@@ -5,7 +5,7 @@ language: csharp
 dist: bionic
 mono: none
 solution: yacep.sln
-dotnet: 2.2.203
+dotnet: 6.0.302
 sudo: required
 script:
   - dotnet restore
