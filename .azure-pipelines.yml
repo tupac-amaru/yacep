@@ -17,7 +17,7 @@ jobs:
     pool:
       vmImage: 'ubuntu-22.04'
     steps:
-      - task: DotNetCoreInstaller@0
+      - task: UseDotNet@2
         displayName: '.NET install'
         inputs:
           version: '$(dotnetCoreVersion)'
@@ -59,7 +59,7 @@ jobs:
     pool:
       vmImage: 'windows-2019'
     steps:
-      - task: DotNetCoreInstaller@0
+      - task: UseDotNet@2
         displayName: '.NET install'
         inputs:
           version: '$(dotnetCoreVersion)'
@@ -80,7 +80,7 @@ jobs:
     pool:
       vmImage: 'ubuntu-22.04'
     steps:
-      - task: DotNetCoreInstaller@0
+      - task: UseDotNet@2
         displayName: '.NET install'
         inputs:
           version: '$(dotnetCoreVersion)'
@@ -133,7 +133,7 @@ jobs:
     pool:
       vmImage: 'windows-2019'
     steps:
-      - task: DotNetCoreInstaller@0
+      - task: UseDotNet@2
         displayName: '.NET install'
         inputs:
           version: '$(dotnetCoreVersion)'
@@ -153,7 +153,7 @@ jobs:
     pool:
       vmImage: 'ubuntu-22.04'
     steps:
-      - task: DotNetCoreInstaller@0
+      - task: UseDotNet@2
         displayName: '.NET install'
         inputs:
           version: '$(dotnetCoreVersion)'
