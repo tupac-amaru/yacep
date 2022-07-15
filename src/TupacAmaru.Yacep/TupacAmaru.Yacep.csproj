@@ -5,6 +5,7 @@
     <PackageId>TupacAmaru.Yacep</PackageId>
     <AssemblyName>TupacAmaru.Yacep</AssemblyName>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <AssemblyTitle>yacep</AssemblyTitle>
     <Description>yet another csharp expression parser</Description>
     <PackageTags>expression;parser;netstandard;core</PackageTags>
@@ -24,7 +25,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
-    <PackageReference Include="System.Memory" Version="4.5.3" />
+    <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
+    <PackageReference Include="System.Memory" Version="4.5.5" />
   </ItemGroup>
 </Project>
