@@ -4,7 +4,6 @@ link:README-en_US.adoc[English (United States)] | 中文
 
 image:https://dev.azure.com/tupac-amaru/yacep/_apis/build/status/tupac-amaru.yacep?branchName=master["Build Status", link="https://dev.azure.com/tupac-amaru/yacep/_build/latest?definitionId=5&branchName=master"]
 image:https://img.shields.io/azure-devops/coverage/tupac-amaru/yacep/5.svg?label=azure%20pipelines%20coverage&color=#49bb1e[Azure DevOps coverage, link="https://dev.azure.com/tupac-amaru/yacep/_build/latest?definitionId=5&branchName=master"]
-image:https://codecov.io/gh/tupac-amaru/yacep/branch/master/graph/badge.svg["Build Status", link="https://codecov.io/gh/tupac-amaru/yacep"]
 image:https://travis-ci.com/tupac-amaru/yacep.svg?branch=master["Build Status", link="https://travis-ci.com/tupac-amaru/yacep"]
 image:https://img.shields.io/appveyor/ci/wushilong/yacep.svg?color=#49bb1e[AppVeyor, link="https://ci.appveyor.com/project/wushilong/yacep/branch/master"]
 image:https://img.shields.io/sonar/https/sonarcloud.io/tupac-amaru_yacep/quality_gate.svg?color=#49bb1e[Sonar Quality Gate, link="https://sonarcloud.io/dashboard?id=tupac-amaru_yacep"]

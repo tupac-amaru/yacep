@@ -85,12 +85,6 @@ jobs:
         inputs:
           version: '$(dotnetCoreVersion)'
       - task: DotNetCoreCLI@2
-        displayName: 'Install coverlet.console'
-        inputs:
-          command: custom
-          custom: tool
-          arguments: 'install -g coverlet.console'
-      - task: DotNetCoreCLI@2
         displayName: 'Install Codecov.Tool'
         inputs:
           command: custom
@@ -120,8 +114,6 @@ jobs:
         displayName: '.NET unit tests'
       - script: dotnet sonarscanner end /d:sonar.login="$(sonarcloud.token)"
         displayName: 'Upload sonarscanner report'
-      - script: coverlet -f "$(Agent.WorkFolder)/coverage/coverage.opencover.xml" -t $(codecov.token)
-        displayName: 'Upload coverage report to coverlet'
       - script: reportgenerator  "-reports:$(Agent.WorkFolder)/coverage/coverage.opencover.xml" "-targetdir:$(Agent.WorkFolder)/coverage/reports" -reporttypes:Cobertura 
         displayName: 'Generate cobertura report'
       - task: PublishCodeCoverageResults@1
