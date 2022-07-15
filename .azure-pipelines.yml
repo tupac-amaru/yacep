@@ -120,8 +120,8 @@ jobs:
         displayName: '.NET unit tests'
       - script: dotnet sonarscanner end /d:sonar.login="$(sonarcloud.token)"
         displayName: 'Upload sonarscanner report'
-      - script: codecov -f "$(Agent.WorkFolder)/coverage/coverage.opencover.xml" -t $(codecov.token)
-        displayName: 'Upload coverage report to codecov'
+      - script: coverlet -f "$(Agent.WorkFolder)/coverage/coverage.opencover.xml" -t $(codecov.token)
+        displayName: 'Upload coverage report to coverlet'
       - script: reportgenerator  "-reports:$(Agent.WorkFolder)/coverage/coverage.opencover.xml" "-targetdir:$(Agent.WorkFolder)/coverage/reports" -reporttypes:Cobertura 
         displayName: 'Generate cobertura report'
       - task: PublishCodeCoverageResults@1
@@ -157,12 +157,6 @@ jobs:
         displayName: '.NET install'
         inputs:
           version: '$(dotnetCoreVersion)'
-      - task: DotNetCoreCLI@2
-        displayName: 'Install benchmarkdotnet.tool'
-        inputs:
-          command: custom
-          custom: tool
-          arguments: 'install -g benchmarkdotnet.tool'
       - task: DotNetCoreCLI@2
         displayName: '.NET build'
         inputs:
